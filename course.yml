@@ -1,7 +1,12 @@
 title            : abc intro 2 r
 instructors      :
  - las2017@med.cornell.edu
-description      : This is an automatically generated demo course which will help you on your way to create an awesome DataCamp course.
+collaborators    :
+ - jason.banfelder@rockefeller.edu
+ - frd2007@med.cornell.edu
+ - paz2005@med.cornell.edu
+university       : Weill Cornell Medical College
+description      : R is a free software environment for statistical computing and graphics (www.r-project.org). It can effectively analyze large-scale datasets, such as those resulting from high-throughput sequencing experiments. It promotes automated and reproducible analyses of scientific data, creates a wide spectrum of publication quality figures, and has an extensive library of add-on packages to facilitate many complex statistical analyses. Much of the power of the R platform derives from the fact that it is NOT a point-and-click environment, and thus has a steeper than usual learning curve. This is compounded by the reality that much of the documentation for R is geared toward those with very advanced training in statistics. This hands-on workshop will help you overcome these obstacles by providing participants with the knowledge and experience to use R for practical scientific data management and analysis applications. This workshop will also demonstrate principles and best practices for handling scientific data at scale, which is becoming ever more important in the ‘big data’ era.
 university       : DataCamp
-difficulty_level : 2
-time_needed      : 1 hour
+difficulty_level : 1
+time_needed      : 12 hours
