@@ -1,7 +1,8 @@
 ---
-title       : Introduction
-description : Getting comfortable with the Console and Script windows, using R's calculator functionality
-attachments :
+title         : Introduction
+description   : Getting comfortable with the Console and Script windows, using R's calculator functionality
+free_preview  : true
+attachments   :
   slides_link : https://s3.amazonaws.com/assets.datacamp.com/course/teach/slides_example.pdf
 
 --- type:NormalExercise lang:r xp:50 skills:1 key:a7e72915d4
