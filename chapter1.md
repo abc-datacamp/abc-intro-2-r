@@ -19,68 +19,43 @@ The answer is, of course, 3, but what is the [1] before it? It turns out that al
 
 
 *** =instructions
-In the script window, try other basic math operations, including subtraction, multiplication, division, as well as integer math
-and exponent math. When you include multiple operations, the order of operations is kept, but you can always force an order with parentheses.
+In the Console window, try other basic math operations, including subtraction (`-`), multiplication (`*`), division (`/`), as well as integer math (`%/%`)
+and exponent math (`^`). When you include multiple operations, the order of operations is kept, but you can always force an order with parentheses.
+
+In the Script window, you can run code that will be evaluated for correctness. Try generating a vector of 10 random numbers. By default, the mean of the distribution the numbers are selected from will be 0, and the standard deviation will be 1. When you are satisfied with your code, click the Submit button.
+
+
+
+*** =pre_exercise_code
+```{r}
+# The pre exercise code runs code to initialize the user's workspace.
+# You can use it to load packages, initialize datasets and draw a plot in the viewer
+
+set.seed(16180339)
+```
 
 *** =sample_code
 ```{r}
-# Subtract 4 from 3
-
-
-# Multiply 5 and 6 together
-
-
-# Divide 7 by 8
-
-
-# Order of operations can be forced. Note the difference between 1 + 2 * 3 and (1 + 2) * 3
-
-
-# The %/% operator does integer division (a division symbol inside two percent signs). The %% (two percent signs) gives you the remainder. Use the first operator to get the number of times 17 can be divided by 4.
-
-
-# What is the remainder from 17 divided by 4?
-
-
-# R can perform exponent math. Compute 2 ^ 4.
-
+# Generate a vector of 10 numbers
 
 
 ```
 
 *** =solution
 ```{r}
-# Subtract 4 from 3
-3 - 4
+# Generate a vector of 10 numbers
+rnorm(10)
 
-# Multiply 5 and 6 together
-5 * 6
-
-# Divide 7 by 8
-7 / 8
-
-# Order of operations can be forced. Note the difference between 1 + 2 * 3 and (1 + 2) * 3
-1 + 2 * 3
-(1 + 2) * 3
-
-# The %/% operator does integer division (a division symbol inside two percent signs). The %% (two percent signs) gives you the remainder. Use the first operator to get the number of times 17 can be divided by 4.
-17 %/% 4
-
-# What is the remainder from 17 divided by 4?
-17 %% 4
-
-# R can perform exponent math. Compute 2 ^ 4.
-2 ^ 4
 ```
 
 
 *** =sct
 ```{r}
 # SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
-
-msg_bad <- "That is not correct!"
-msg_success <- "Exactly! You can now perform basic math in R!"
-
+test_function("rnorm", args = "x",
+              not_called_msg = "Use the `rnorm()` function to generate a vector of random numbers",
+              args_not_specified_msg = "Have you specified the argument to the `rnorm()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`10`) to the `rnorm()` function? For this exercise, no other arguments are necessary.")
 ```
 --- type:NormalExercise lang:r xp:50 skills:1 key:61c54de30b
 ## Math functions in R
@@ -101,14 +76,6 @@ Other examples of R math functions include: <br/>
 The `log()` function can also return the log in other bases, if its second argument is the base. For example, `log(4, 10)` returns the log of 4 in base 10.
 
 
-
-*** =pre_exercise_code
-```{r}
-# The pre exercise code runs code to initialize the user's workspace.
-# You can use it to load packages, initialize datasets and draw a plot in the viewer
-
-set.seed(16180339)
-```
 
 *** =sample_code
 ```{r}
@@ -157,7 +124,30 @@ exp(2)
 *** =sct
 ```{r}
 # SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
-
+test_function("log", args = "x",
+              not_called_msg = "Use the `log()` function to calculate the natural log of a number",
+              args_not_specified_msg = "Have you specified the argument to the `log()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`4`) to the `log()` function?")
+test_function("log10", args = "x",
+              not_called_msg = "Use the `log10()` function to calculate the base10 log of a number",
+              args_not_specified_msg = "Have you specified the argument to the `log10()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`4`) to the `log10()` function?")
+test_function("log", args = "x",
+              not_called_msg = "Use the `log()` function with two arguments to calculate the log in any base of a number",
+              args_not_specified_msg = "Have you specified the argument to the `log()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`4` and `10) to the `log()` function?")
+test_function("sqrt", args = "x",
+              not_called_msg = "Use the `sqrt()` function to calculate the square root of a number",
+              args_not_specified_msg = "Have you specified the argument to the `sqrt()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`9`)  to the `sqrt()` function?")
+test_function("abs", args = "x",
+              not_called_msg = "Use the `abs()` function to calculate the absolute value of a number",
+              args_not_specified_msg = "Have you specified the argument to the `abs()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`3 - 4`) to the `abs()` function?")
+test_function("exp", args = "x",
+              not_called_msg = "Use the `exp()` function to calculate the exponential of a number",
+              args_not_specified_msg = "Have you specified the argument to the `exp()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`2`) to the `exp()` function?")
 msg_bad <- "That is not correct!"
 msg_success <- "Exactly! There are many more math functions in R for you to explore!"
 ```
