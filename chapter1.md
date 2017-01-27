@@ -175,3 +175,55 @@ test_function("exp", args = "x",
 test_error()
 success_msg("Exactly! There are many more math functions in R for you to explore!")
 ```
+--- type:NormalExercise lang:r xp:50 skills:1 key:2c8bc6120f
+## Variables
+
+It is useful to assign values to variables, so they can be referred to later. This is done using the assignment operator `<-`.
+
+
+*** =instructions
+
+Assign the given numeric values for `US.population` and `US.area` and calculate the `US.pop.density`. Note, case matters!
+
+*** =sample_code
+```{r}
+# Set the variable US.population to 3.19e8
+
+
+# Set the variable US.area to 3719000
+
+
+# Calculate the US.pop.density by dividing US.population by US.area
+
+
+# R will not automatically print out the value of an assigned variable. Type the name of the variable by itself to see it.
+
+
+```
+
+*** =solution
+```{r}
+# Set the variable US.population to 3.19e8
+US.population <- 3.19e8
+
+# Set the variable US.area to 3719000
+US.area <- 3719000
+
+# Calculate the US.pop.density by dividing US.population by US.area
+US.pop.density <- US.population / US.area
+
+# R will not automatically print out the value of an assigned variable. Type the name of the variable by itself to see it.
+US.pop.density
+
+```
+
+
+*** =sct
+```{r}
+test_object("US.population")
+test_object("US.area")
+test_object("US.pop.density")
+test_output_contains("US.pop.density",
+                      incorrect_msg = "Did you print out `US.pop.density` on a line by itself?")
+test_error()
+```
