@@ -22,7 +22,7 @@ The answer is, of course, 3, but what is the [1] before it? It turns out that al
 In the Console window, try other basic math operations, including subtraction (`-`), multiplication (`*`), division (`/`), as well as integer math (`%/%`)
 and exponent math (`^`). When you include multiple operations, the order of operations is kept, but you can always force an order with parentheses.
 
-In the Script window, you can run code that will be evaluated for correctness. Try generating a vector of 10 random numbers. By default, the mean of the distribution the numbers are selected from will be 0, and the standard deviation will be 1. When you are satisfied with your code, click the Submit button.
+In the Script window, you can run code that will be evaluated for correctness. Follow the instructions to multiply two numbers, divide two numbers, and perform exponent math. Try generating a vector of 10 random numbers. By default, the mean of the distribution the numbers are selected from will be 0, and the standard deviation will be 1. When you are satisfied with your code, click the Submit button.
 
 
 
@@ -36,6 +36,15 @@ set.seed(16180339)
 
 *** =sample_code
 ```{r}
+# Multiply 5 and 6 together
+
+
+# Divide 7 by 8
+
+
+# R can perform exponent math. Compute 2 ^ 4.
+
+
 # Generate a vector of 10 numbers
 
 
@@ -43,6 +52,15 @@ set.seed(16180339)
 
 *** =solution
 ```{r}
+# Multiply 5 and 6 together
+5 * 6
+
+# Divide 7 by 8
+7 / 8
+
+# R can perform exponent math. Compute 2 to the power of 4.
+2 ^ 4
+
 # Generate a vector of 10 numbers
 rnorm(10)
 
@@ -52,11 +70,13 @@ rnorm(10)
 *** =sct
 ```{r}
 # SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
-test_function("rnorm", args = "x",
+ex() %>% check_operator("*") %>% check_result() %>% check_equal()
+ex() %>% check_operator("/") %>% check_result() %>% check_equal()
+ex() %>% check_operator("^") %>% check_result() %>% check_equal()
+test_function("rnorm", args = "n",
               not_called_msg = "Use the `rnorm()` function to generate a vector of random numbers",
               args_not_specified_msg = "Have you specified the argument to the `rnorm()` function?",
               incorrect_msg = "Have you passed in the correct argument (`10`) to the `rnorm()` function? For this exercise, no other arguments are necessary.")
-```
 --- type:NormalExercise lang:r xp:50 skills:1 key:61c54de30b
 ## Math functions in R
 
@@ -124,7 +144,7 @@ exp(2)
 *** =sct
 ```{r}
 # SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
-test_function("log", args = "x",
+test_function("log", args = "x", index = 1,
               not_called_msg = "Use the `log()` function to calculate the natural log of a number",
               args_not_specified_msg = "Have you specified the argument to the `log()` function?",
               incorrect_msg = "Have you passed in the correct argument (`4`) to the `log()` function?")
@@ -132,7 +152,7 @@ test_function("log10", args = "x",
               not_called_msg = "Use the `log10()` function to calculate the base10 log of a number",
               args_not_specified_msg = "Have you specified the argument to the `log10()` function?",
               incorrect_msg = "Have you passed in the correct argument (`4`) to the `log10()` function?")
-test_function("log", args = "x",
+test_function("log", args = c("x", "base"), index = 2,
               not_called_msg = "Use the `log()` function with two arguments to calculate the log in any base of a number",
               args_not_specified_msg = "Have you specified the argument to the `log()` function?",
               incorrect_msg = "Have you passed in the correct arguments (`4` and `10) to the `log()` function?")
