@@ -37,3 +37,50 @@ test_mc(correct = 4,
         feedback_msgs = c(msg1, msg2, msg3, msg4))
 
 ```
+--- type:NormalExercise lang:r xp:50 skills:1 key:a1e7552548
+## Data frames
+
+Data frames are two-dimensional data structures like matrices, but, unlike matrices, they can contain multiple different data types. You can think of a data frame as a list of vectors, where all the vector lengths are the same. Data frames are commonly used to represent tabular data.
+
+
+*** =instructions
+
+When we were learning about vectors, we used several parallel vectors, each with length 50 to represent information about US states. The collection of vectors really belongs together, and a data frame is the tool for doing this. The `data.frame()` function combines the four data sets into a single data frame. Note that the first three data sets are vectors (two character, one numeric), but the last data set is a list with two components.
+
+Note the `stringsAsFactors = FALSE` argument. Some of the vectors that we are using are character vectors, but will be automatically converted to factors if this option is not set. Since we will want to work with our character data as vectors, not as factors, we want to set this argument to `FALSE`.
+
+Data frames have a split personality. They behave both like a tagged list of vectors, and like a matrix! This gives you many options for accessing elements. Fortunately, you know them all already!
+
+
+
+*** =sample_code
+```{r}
+# Combine different data about US states into a single data frame
+state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
+
+# Access the state abbreviations column using list notation. Convince yourself that state.db$state.abb, state.db[[ "state.abb" ]] and state.db[[ 2 ]] all give the same result.
+
+
+```
+
+*** =solution
+```{r}
+# Combine different data about US states into a single data frame
+state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
+
+# Access the state abbreviations column using list notation. Convince yourself that state.db$state.abb, state.db[[ "state.abb" ]] and state.db[[ 2 ]] all give the same result.
+state.db$state.abb
+
+```
+
+*** =hint
+You can access a column in a data frame using list notation. `state.db$state.abb`, `state.db[[ "state.abb" ]]` and `state.db[[ 2 ]]` all work!
+
+
+*** =sct
+```{r}
+test_predefined_objects("state.db")
+test_output_contains("state.db$state.abb",
+                         incorrect_msg = "Check your syntax when printing out the state abbreviations column?")
+test_error()
+```
