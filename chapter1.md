@@ -227,3 +227,71 @@ test_output_contains("US.pop.density",
                       incorrect_msg = "Did you print out `US.pop.density` on a line by itself?")
 test_error()
 ```
+--- type:NormalExercise lang:r xp:50 skills:1 key:b8fbc15222
+## Data types
+
+So far, we have been dealing with numerical data, but in the real world, data takes many forms.
+R has several basic data types that you can use:<br/>
+numeric<br/>
+logical (i.e., TRUE or FALSE) <br/>
+character, in quotes (e.g., "Jane Doe") <br/>
+NA (used to represent an unknown or missing value <br/>
+NULL (used to represent something that does not exist
+
+R can convert between datatypes using a series of `as.()` methods, e.g., `as.numeric(TRUE)` results in `1`.
+
+*** =instructions
+
+When working with truth values, you can use the logical operators: <br/>
+AND (&) <br/>
+OR (|) <br/>
+NOT (!)
+
+Show that R uses tri-state logic when working with truth values by combining logical data types with the different operators.
+
+*** =sample_code
+```{r}
+# Set the variable has.diabetes to TRUE
+has.diabetes <- TRUE
+
+# Set the variable is.enrolled to FALSE
+
+
+# Set the variable is.candidate by combining has.diabetes and is.enrolled with AND NOT
+
+
+# Set the variable is.a.minor to TRUE
+
+
+# Combine all three variables with AND NOT
+
+
+```
+
+*** =solution
+```{r}
+# Set the variable has.diabetes to TRUE
+has.diabetes <- TRUE
+
+# Set the variable is.enrolled to FALSE
+is.enrolled <- FALSE
+
+# Set the variable is.candidate by combining has.diabetes and is.enrolled with AND NOT
+is.candidate <- has.diabetes & ! is.enrolled
+
+# Set the variable is.a.minor to TRUE
+is.a.minor <- TRUE
+
+# Combine all three variables with AND NOT
+has.diabetes & ! is.enrolled & ! is.a.minor
+```
+
+
+*** =sct
+```{r}
+test_predefined_objects("has.diabetes")
+test_object("is.enrolled", incorrect_msg = "Did you set `is.enrolled` to `FALSE`? Note uppercase!")
+test_object("is.candidate")
+test_object("is.a.minor")
+test_error()
+```
