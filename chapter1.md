@@ -42,7 +42,7 @@ set.seed(16180339)
 # Divide 7 by 8
 
 
-# R can perform exponent math. Compute 2 ^ 4.
+# R can perform exponent math. Compute 2 to the power of 4.
 
 
 # Generate a vector of 10 numbers
@@ -77,6 +77,9 @@ test_function("rnorm", args = "n",
               not_called_msg = "Use the `rnorm()` function to generate a vector of random numbers",
               args_not_specified_msg = "Have you specified the argument to the `rnorm()` function?",
               incorrect_msg = "Have you passed in the correct argument (`10`) to the `rnorm()` function? For this exercise, no other arguments are necessary.")
+test_error()
+success_msg("Great! Now you can do basic math in R!")
+```              
 --- type:NormalExercise lang:r xp:50 skills:1 key:61c54de30b
 ## Math functions in R
 
@@ -148,14 +151,15 @@ test_function("log", args = "x", index = 1,
               not_called_msg = "Use the `log()` function to calculate the natural log of a number",
               args_not_specified_msg = "Have you specified the argument to the `log()` function?",
               incorrect_msg = "Have you passed in the correct argument (`4`) to the `log()` function?")
+test_function_result("log", index = 1, incorrect_msg = "Check your `log()` call. Are you passing in the correct argument (`4`)? Are you calculating the natural log?")  
 test_function("log10", args = "x",
               not_called_msg = "Use the `log10()` function to calculate the base10 log of a number",
               args_not_specified_msg = "Have you specified the argument to the `log10()` function?",
               incorrect_msg = "Have you passed in the correct argument (`4`) to the `log10()` function?")
 test_function("log", args = c("x", "base"), index = 2,
               not_called_msg = "Use the `log()` function with two arguments to calculate the log in any base of a number",
-              args_not_specified_msg = "Have you specified the argument to the `log()` function?",
-              incorrect_msg = "Have you passed in the correct arguments (`4` and `10) to the `log()` function?")
+              args_not_specified_msg = "Have you specified both arguments to the `log()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`4` and `10`) to the `log()` function?")
 test_function("sqrt", args = "x",
               not_called_msg = "Use the `sqrt()` function to calculate the square root of a number",
               args_not_specified_msg = "Have you specified the argument to the `sqrt()` function?",
@@ -168,6 +172,6 @@ test_function("exp", args = "x",
               not_called_msg = "Use the `exp()` function to calculate the exponential of a number",
               args_not_specified_msg = "Have you specified the argument to the `exp()` function?",
               incorrect_msg = "Have you passed in the correct argument (`2`) to the `exp()` function?")
-msg_bad <- "That is not correct!"
-msg_success <- "Exactly! There are many more math functions in R for you to explore!"
+test_error()
+success_msg("Exactly! There are many more math functions in R for you to explore!")
 ```
