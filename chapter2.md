@@ -401,14 +401,91 @@ test_error()
 ```
 
 
-
-
-
-
-
-
-
 --- type:NormalExercise lang:r xp:50 skills:1 key:a1e7552548
+## Factors
+
+Factors are similar to vectors, and can mostly be treated as such, but they have another tier of information. A factor keeps track of all the
+distinct values in that vector, and notes the positions in the vector where each distinct value can be found.
+Factors are R's preferred way of storing categorical data.
+The set of distinct values are called levels. To see (and set) the levels of a factor, you can use the `levels()`
+function, which will return the levels as a vector.
+
+Note that setting the levels of a factor using `levels()` only changes the labels, not
+the underlying integer representation.
+
+The `str()` function allows you to view the structure of an object, and will give you a hint about how R stores factors (or any other object). 
+The `class()` function returns the class of an object, without having to see all the details.</br>
+`str(state.division)` </br>
+`class(state.division)`
+
+Note the list of integers corresponds to the level at each position. While factors may behave like
+character vectors in many ways, they are much more efficient because they are internally represented
+as integers, and computers are good at working with integers.
+
+*** =instructions
+
+Generate a vector of 500 colors, called pony.colors, from the colors vector (which has been pre-loaded for you), and convert it to a factor using the factor() function. The levels of a factor are by default sorted in alphabetical order, but the order can be set using the `levels` parameter in the `factor()` function. Create a second factor, pony.colors.f2, where the levels are in the same order as in the colors vector. This is especially important if your vector does not include examples of all the levels you want to include.
+
+*** =pre_exercise_code
+```{r}
+colors <- c("red", "orange", "yellow", "green", "blue", "indigo", "violet")
+```
+
+
+*** =sample_code
+```{r}
+# Generate a vector of 500 colors, called pony.colors, from the colors vector
+
+
+# Convert this to a factor called pony.colors.f using the factor() function
+
+
+# Look at the structure of this factor using str()
+
+
+# Plot the pony.colors.f factor to see how often each factor appears
+
+
+# Ensure the levels are in the same order as the colors vector
+
+
+
+```
+
+*** =solution
+```{r}
+# Generate a vector of 500 colors, called pony.colors, from the colors vector
+pony.colors <- sample(colors, size = 500, replace = TRUE)
+
+# Convert this to a factor called pony.colors.f using the factor() function
+pony.colors.f <- factor(pony.colors)
+
+# Look at the structure of this factor using str()
+str(pony.colors.f)
+
+# Plot the pony.colors.f factor to see how often each factor appears
+plot(pony.colors.f)
+
+# Ensure the levels are in the same order as the colors vector
+pony.colors.f2 <- factor(pony.colors, levels = colors)
+
+```
+
+*** =hint
+no hints yet
+
+*** =sct
+```{r}
+test_predefined_objects("colors")
+test_error()
+```
+
+
+
+
+
+
+--- type:NormalExercise lang:r xp:50 skills:1 key:472005b77b
 ## Data frames
 
 Data frames are two-dimensional data structures like matrices, but, unlike matrices, they can contain multiple different data types. You can think of a data frame as a list of vectors, where all the vector lengths are the same. Data frames are commonly used to represent tabular data.
