@@ -235,8 +235,8 @@ R has several basic data types that you can use:<br/>
 numeric<br/>
 logical (i.e., TRUE or FALSE) <br/>
 character, in quotes (e.g., "Jane Doe") <br/>
-NA (used to represent an unknown or missing value <br/>
-NULL (used to represent something that does not exist
+NA (used to represent an unknown or missing value) <br/>
+NULL (used to represent something that does not exist)
 
 R can convert between datatypes using a series of `as.()` methods, e.g., `as.numeric(TRUE)` results in `1`.
 

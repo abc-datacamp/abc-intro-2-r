@@ -480,7 +480,154 @@ test_predefined_objects("colors")
 test_error()
 ```
 
+--- type:NormalExercise lang:r xp:50 skills:1 key:646bd4bed5
+## Matrices
 
+The multi-dimensional structures in R, where all the elements are of the same data type, are called arrays.
+Arrays have three dimensions: number of rows, number of columns and number of layers. Matrices are a
+special type of array using only two of those dimensions (rows and columns) and can be thought of as
+tables, which can only contain a single data type.
+
+An example of a matrix is the USPersonalExpenditure dataset, one of the built-in datasets, which describes how
+much Americans spent in five categories from 1940-1960.
+
+Accessing (and assigning) elements of a matrix is analogous to accessing (and assigning) elements of
+a vector, but where vectors have only one index position, matrices have two, one for rows and
+one for columns. As with vectors, each specification is an indexing vector.
+
+*** =instructions
+
+Examine the USPersonalExpenditure dataset. Notice that the rows and columns of the matrix are named, using the categories and years as row
+names and column names, respectively. Find how many rows and columns the dataset has using `dim()`. Access the rows and columns as separate vectors using the `rownames()` and `colnames()` functions. 
+
+Use indexing vectors to access specific elements, or complete rows or columns. For example, `USPersonalExpenditure[1, 3]` 
+returns the element in the first row, third column. Return the same element, but using character index vectors to indicate the rows and columns.
+
+A blank vector in either the row or column specification implies we want all elements in that dimension. Get all Private Education expeditures. If your result is one-dimensional, it is by default returned as a vector. If you don't want this behavior, you can use the
+`drop=FALSE` option.
+
+Remember all of the elements in a matrix must be of the same data type. If you assign one element
+of a different data type, R will convert (or coerce) elements as necessary.
+`USPersonalExpenditure["Personal Care", "1955"] <- "Unknown"` will convert all elements in the matrix from numbers to characters. How should we have done this to avoid this
+coercion?
+
+
+*** =sample_code
+```{r}
+# Use dim() to find how many rows and columns the USPersonalExpenditure dataset has
+
+
+# List the row and column names of USPersonalExpenditure
+
+
+
+# Use character vectors to return the element at USPersonalExpenditure[1, 3]
+
+
+# Get all Private Education and Personal Care expeditures for all years
+
+
+# Return the Personal Care expenditures from all years, as a matrix
+
+
+# Assign the element for Personal Care in 1955 as unknown, such that the elements of the matrix are not coerced to characters
+
+```
+
+*** =solution
+```{r}
+# Use dim() to find how many rows and columns the USPersonalExpenditure dataset has
+dim(USPersonalExpenditure)
+
+# List the row and column names of USPersonalExpenditure
+rownames(USPersonalExpenditure)
+colnames(USPersonalExpenditure)
+
+# Use character vectors to return the element at USPersonalExpenditure[1, 3]
+USPersonalExpenditure["Food and Tobacco", "1950"]
+
+# Get all Private Education and Personal Care expeditures for all years
+USPersonalExpenditure[c("Private Education", "Personal Care"), ]
+
+# Return the Personal Care expenditures from all years, as a matrix
+USPersonalExpenditure["Personal Care",  , drop = FALSE]
+
+# Assign the element for Personal Care in 1955 as unknown, such that the elements of the matrix are not coerced to characters
+USPersonalExpenditure["Personal Care", "1955"] <- NA
+
+
+```
+
+*** =hint
+no hints yet
+
+*** =sct
+```{r}
+test_error()
+```
+
+
+--- type:NormalExercise lang:r xp:50 skills:1 key:ee938e4524
+## Creating matrices
+
+There are a few ways to make a new matrix. The `matrix()` function takes as arguments a vector of all
+the elements, and then some information about how many rows and columns there are. By default, the matrix
+is filled in column order, but you can change this behaviour with the `by.rows=TRUE` option.
+
+For example, `game1 <- matrix(c("X","","O","","X","O","","",""), ncol = 3)`
+creates a tic-tac-toe game. 
+In this matrix, the rows and columns are not named, and can only be accessed using numeric
+indices.
+
+Another very common way of assembling a matrix is by combining vectors or matrices. They can be
+stacked by row or column, using the `rbind()` or `cbind()` functions, respectively.
+
+*** =instructions
+
+Look at the help pages for the `matrix()` function. Create a numeric 3x4 matrix called m, filled with 0. Name the rows and columns using the built-in letters and LETTERS vectors, which contain the lowercase and uppercase letters of the alphabet, respectively.
+
+Use `cbind()` to create a second matrix from the built-in datasets `state.name` and `state.abb`.
+
+*** =sample_code
+```{r}
+# Create a 3x4 numeric matrix called m, filled with 0
+
+
+# Name the rows a through c and the columns A through D. Hint, use the built-in letters/LETTERS vectors for this.
+
+
+# Assign 1s to the first column
+
+
+# Create a second matrix called m2, using cbind() to combine state.name and state.abb
+
+```
+
+*** =solution
+```{r}
+# Create a 3x4 numeric matrix called m, filled with 0
+m <- matrix(0, nrow = 3, ncol = 4)
+
+# Name the rows a through c and the columns A through D. Hint, use the built-in letters/LETTERS vectors for this.
+rownames(m) <- letters[1:3]
+colnames(m) <- LETTERS[1:4]
+
+# Assign 1s to the first column
+m[ , 1] <- 1 # could also be accessed using m[ , "A"]
+
+# Create a second matrix called m2, using cbind() to combine state.name and state.abb
+cbind(state.name, state.abb)
+
+
+```
+
+*** =hint
+Did you assign the rows and columns correctly? Remember, by default, R does rows by columns (R x C).
+
+*** =sct
+```{r}
+test_error()
+```
 
 
 
@@ -532,3 +679,7 @@ test_output_contains("state.db$state.abb",
                          incorrect_msg = "Check your syntax when printing out the state abbreviations column?")
 test_error()
 ```
+
+
+
+
