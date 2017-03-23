@@ -270,6 +270,8 @@ We can see all the small states and their areas in one shot:
 Sadly, not all functions that fetch an element from a vector keep the associated name, e.g., `min(state.area)`, but you can find the index at which the minimum occurs, and use that.
 `state.area[which.min(state.area)]`
 
+To remove all names from vector elements, use the `unname()` function.
+
 
 *** =instructions
 
@@ -628,6 +630,112 @@ Did you assign the rows and columns correctly? Remember, by default, R does rows
 ```{r}
 test_error()
 ```
+
+
+--- type:NormalExercise lang:r xp:50 skills:1 key:7152a4e90b
+## Lists
+
+A list in R is analogous to a hash or associative array in most other programming languages. 
+Lists can hold data structures of different types,
+and of different sizes. Each component in a list can be (optionally, but commonly) separately named. In fact, one list
+can be a member of another list, allowing for deeply nested and arbitrarily complex data structures to be
+modeled.
+
+Lists can be created using the list() function. When using the `list()` function, you can optionally
+give names to the components (component names are called tags).
+`pete <- list("Peter", "O'Toole", 1932, FALSE)`
+`pete <- list(first.name = "Peter", last.name = "O'Toole", yob = 1932, oscar.winner = FALSE)`
+Note that we have different data types in the same list (character, numeric and logical). Note also
+the difference between the first and second attempt to model a great actor. In the first case, you need
+to know what the position of each component is; in the second, each component is named (tagged)
+with the tag we provided at creation.
+
+There are several ways to refer to the components of a list; the differences can be subtle, but important.
+The most straightforward way to refer to a single component is using the `[[` notation. You can always
+provide an integer to access the component by position, or you can provide a character string if the
+component is tagged.
+
+For tagged components where the tag is a literal character string, you can use the `$` notation. This
+is less flexible, but looks clearer. Use this when you can.
+If you want to access multiple components, you can use the `[` notation, which takes the usual indexing
+vector. Note that this will always return a list (this has to be so, because the components returned
+could be of different datatypes).
+
+*** =instructions
+
+The results of many high-level analyses in R are packaged as lists.
+The `lm()` function fits data to a linear model (i.e., performs a linear regression), and packages up
+all of the results into a kind of list object.
+
+Use the `lm()` function to generate a linear model for the relationship between Private Education expenditure over the years. This code has been provided for you.
+
+Explore the my.model object.
+
+Can you extract the slope and intercept of the best-fit line?
+Can you extract the value of R-squared reported by the `summary()` function? Hint: save the
+result of this function, and look into its structure.
+
+
+*** =pre_exercise_code
+```{r}
+edu.spend <- unname(USPersonalExpenditure["Private Education", ])
+edu.yr <- seq(from = 0, to = 20, by = 5)
+my.model <- lm(edu.spend ~ edu.yr)
+
+```
+
+
+*** =sample_code
+```{r}
+# Make a linear model of Private Education expenditure over 25 years
+edu.spend <- unname(USPersonalExpenditure["Private Education", ])
+edu.yr <- seq(from = 0, to = 20, by = 5)
+my.model <- lm(edu.spend ~ edu.yr)
+
+# Extract the slope (labelled edu.yr in the coefficients component) of the best-fit line into a variable called slope.
+
+
+# Extract the intercept (also from the coefficients component) into a variable called intercept
+
+
+# Run summary() on the my.model object and save it to a variable called model.summary
+
+
+# Extract the value of R-squared from the model.summary object 
+
+
+```
+
+*** =solution
+```{r}
+# Make a linear model of Private Education expenditure over 25 years
+edu.spend <- unname(USPersonalExpenditure["Private Education", ])
+edu.yr <- seq(from = 0, to = 20, by = 5)
+my.model <- lm(edu.spend ~ edu.yr)
+
+# Extract the slope (labelled edu.yr in the coefficients component) of the best-fit line into a variable called slope.
+slope <- my.model$coefficients["edu.yr"]
+
+# Extract the intercept (also from the coefficients component) into a variable called intercept
+slope <- my.model$coefficients["(Intercept)"]
+
+# Run summary() on the my.model object and save it to a variable called model.summary
+model.summary <- summary(my.model)
+
+# Extract the value of R-squared from the model.summary object 
+model.summary$r.squared
+
+
+```
+
+*** =hint
+Use an indexing vector to extract the correct element from the coefficients component
+
+*** =sct
+```{r}
+test_error()
+```
+
 
 
 
