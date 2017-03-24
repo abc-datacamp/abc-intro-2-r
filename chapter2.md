@@ -745,15 +745,27 @@ test_error()
 
 Data frames are two-dimensional data structures like matrices, but, unlike matrices, they can contain multiple different data types. You can think of a data frame as a list of vectors, where all the vector lengths are the same. Data frames are commonly used to represent tabular data.
 
+Data frames behave both like a tagged list of vectors, and like a matrix, giving many options for accessing elements. Fortunately, you know them all already! When accessing a single column, the list notation is preferred. When accessing multiple columns or a subset of rows, the matrix notation is used (rows and columns are given as indexing vectors).
+
 
 *** =instructions
 
-When we were learning about vectors, we used several parallel vectors, each with length 50 to represent information about US states. The collection of vectors really belongs together, and a data frame is the tool for doing this. The `data.frame()` function combines the four data sets into a single data frame. Note that the first three data sets are vectors (two character, one numeric), but the last data set is a list with two components.
+When we were learning about vectors, we used several parallel vectors, each with length 50 to represent information about US states. The collection of vectors really belongs together, and a data frame is the tool for doing this. The `data.frame()` function combines the four data sets into a single data frame (code provided for you). Note that the first three data sets are vectors (two character, one numeric), but the last data set is a list with two components.
 
 Note the `stringsAsFactors = FALSE` argument. Some of the vectors that we are using are character vectors, but will be automatically converted to factors if this option is not set. Since we will want to work with our character data as vectors, not as factors, we want to set this argument to `FALSE`.
 
-Data frames have a split personality. They behave both like a tagged list of vectors, and like a matrix! This gives you many options for accessing elements. Fortunately, you know them all already!
+As with matrices, the rows can be given names, using `rownames()`. Column names are accessed with the `names()` or `colnames()` functions.
 
+New columns are added the same way you would add one to a list.
+
+Many tools in R work naturally with data frames. Read the help pages for the`plot()` function. The code for visualizing the size distribution of
+state within each division is provided for you. Read the first argument as "area as a function of division". 
+
+
+*** =pre_exercise_code
+```{r}
+state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
+```
 
 
 *** =sample_code
@@ -762,6 +774,21 @@ Data frames have a split personality. They behave both like a tagged list of vec
 state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
 
 # Access the state abbreviations column using list notation. Convince yourself that state.db$state.abb, state.db[[ "state.abb" ]] and state.db[[ 2 ]] all give the same result.
+
+# Name the rows of state.db using state abbreviations from state.abb
+
+
+# Update the column names: "name", "abb", "area", "long", "lat"
+
+
+# Add state.division to the data frame as a column called division
+
+
+# Use plot() to visualize the size distribution of state within each division
+plot(area ~ division, data = state.db)
+
+# Use plot() to visualize latitude as a function of longtitude
+
 
 
 ```
@@ -773,6 +800,22 @@ state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsA
 
 # Access the state abbreviations column using list notation. Convince yourself that state.db$state.abb, state.db[[ "state.abb" ]] and state.db[[ 2 ]] all give the same result.
 state.db$state.abb
+
+# Name the rows of state.db using state abbreviations from state.abb
+rownames(state.db) <- state.abb
+
+# Update the column names: "name", "abb", "area", "long", "lat"
+names(state.db) <- c("name", "abb", "area", "long", "lat")
+
+# Add state.division to the data frame as a column called division
+state.db$division <- state.division
+
+# Use plot() to visualize the size distribution of state within each division
+plot(area ~ division, data = state.db)
+
+# Use plot() to visualize latitude as a function of longtitude
+plot(lat ~ long, data = state.db)
+
 
 ```
 
@@ -787,6 +830,85 @@ test_output_contains("state.db$state.abb",
                          incorrect_msg = "Check your syntax when printing out the state abbreviations column?")
 test_error()
 ```
+
+
+--- type:NormalExercise lang:r xp:50 skills:1 key:f84392e3cd
+## Subsetting data frames
+
+As before, logical vectors can be used as indices.
+
+Another way to select data from a data frame is using the `subset()` function. You can choose rows
+based on a logical expression and can choose columns with the select option. With this function,
+we only have to type the dataset name once.
+
+The logical condition is optional, and you can specify columns to omit instead of columns to include.
+`subset(state.db, select = c(name, abb))`
+`subset(state.db, select = -c(long, lat))`
+
+
+*** =instructions
+The state.db dataset from the last exercise has been pre-loaded for you. 
+
+Use row and column indexing vectors to extract the longitude and latitude of the centers of New York, New Jersey and Rhode Island.
+
+Use both a logical indexing vector, and `subset()`, to extract the names of all states where the area of the state is less than the median.
+
+Use `subset()` to extract all the states that are part of the New England, Middle Atlantic, South Atlantic and Pacific divisions (hint: use the `%in%` operator).
+
+
+
+*** =pre_exercise_code
+```{r}
+state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
+rownames(state.db) <- state.abb
+names(state.db) <- c("name", "abb", "area", "long", "lat")
+state.db$division <- state.division
+```
+
+
+*** =sample_code
+```{r}
+# Extract the longitude and latitude of the centers of New York, New Jersey and Rhode Island  
+
+
+# Extract the names of all states where the area of the state is less than the median, using a logical indexing vector
+
+
+# Do the same thing, using the subset() function
+
+
+# Use subset() to extract all the states that are part of the New England, Middle Atlantic, South Atlantic and Pacific divisions
+
+
+
+```
+
+*** =solution
+```{r}
+# Extract the longitude and latitude of the centers of New York, New Jersey and Rhode Island  
+state.db[c("NY", "NJ", "CT", "RI"), c("long", "lat")]
+
+# Extract the names of all states where the area of the state is less than the median, using a logical indexing vector
+state.db[state.db$area < median(state.db$area), "name"]
+
+# Do the same thing, using the subset() function
+subset(state.db, area < median(area), select = name)
+
+# Use subset() to extract all the states that are part of the New England, Middle Atlantic, South Atlantic and Pacific divisions
+subset(state.db, division %in% c("New England", "Middle Atlantic", "South Atlantic", "Pacific") )
+
+
+```
+
+*** =hint
+no hints yet
+
+*** =sct
+```{r}
+test_error()
+```
+
+
 
 
 
