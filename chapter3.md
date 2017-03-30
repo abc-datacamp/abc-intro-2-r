@@ -1,22 +1,216 @@
 ---
-title       : Insert the chapter title here
-description : Insert the chapter description here
+title         : Plotting
+description   : Introduces the ggplot2 package
+free_preview  : true
 
 --- type:NormalExercise lang:r xp:100 skills:1 key:1b4b89b117
-## Some Exercise
+## Introduction to ggplot
+Although R has some basic plotting functionality which we have seen hints of, the ggplot2 package is
+more comprehensive and consistent.
+
+There are many ways to install a package. The main three are: from CRAN, using `install.packages(packagename)`; from Bioconductor, using `biocLite(packagename)`, and from GitHub, using `install.packages("devtools"); devtools::install_github("username/packagename")`
+
+After installing a package, to load a library into an R session, use `library()`.
+
+ggplot2 relies entirely on data frames for input. At a minimum, the two things that you need to give `ggplot()` are:<br/>
+a. The dataset (which must be a data frame), and the variable(s) you want to plot<br/>
+b. The type of plot you want to make.
+
+Aesthetics are used to bind plotting parameters to your data. Thus
+`ggplot(ablation, aes(x = Time, y = Score)) + geom_point()`
+will take the data from the ablation data frame, plotting the Time column on the x-axis versus the Score column on the y-axis. The `geom_point()` layer indicates that we wish to plot a scatter plot.
+
+`ggplot(ablation, aes(x = Time, y = Score)) + geom_point(color = "red", size = 4)`
 
 
 *** =instructions
 
+A data frame called `ablation` has been uploaded for you.
+
+
+
 *** =hint
+
+no hints yet
 
 *** =pre_exercise_code
 ```{r}
-
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+library(ggplot2)
 ```
 
 *** =sample_code
 ```{r}
+
+# Create a scatter plot with the ablation data
+
+
+# Change the color of the points to be red and the size 4
+
+
+```
+
+*** =solution
+```{r}
+# Create a scatter plot with the ablation data
+ggplot(ablation, aes(x = Time, y = Score)) + geom_point()
+
+# Change the color of the points to be red and the size 4
+ggplot(ablation, aes(x = Time, y = Score)) + geom_point(color = "red", size = 4)
+
+```
+
+*** =sct
+```{r}
+test_error()
+```
+--- type:NormalExercise lang:r xp:100 skills:1 key:299af8f62d
+## Layers
+Layers are added to the ggplot object with `+`.
+The aesthetics that are used to bind plotting parameters to your data can be specific to each layer. Thus, 
+`g <- ggplot(ablation, aes(x = Time, y = Score))`
+creates a base ggplot object called `g`, binding the x and y axes.
+`g <- g + geom_point(aes(color = Experiment), size = 4)`
+adds a scatterplot layer to the `g` object, with its own binding of the color aesthetic. In addition to `x`, `y`, `color`, other aesthetics include: shape, size, linetype, fill, alpha, group.
+
+Any bindings defined in the base ggplot object are inherited by all layers (but can be overridden by any individual layer's aesthetic).
+
+It is sometimes useful to save off the base ggplot object and add layers in separate commands. The
+plot is only rendered when it is called with `print()`. This is useful for several reasons:<br/>
+a. We don't need to create one big huge command to create a plot, we can create it piecemeal.<br/>
+b. The plot will not get rendered until it has received all of its information, and therefore allows
+ggplot2 to be more intelligent than R's built-in plotting commands when deciding how large a
+plot should be, what the best scale is, etc.
+
+
+*** =instructions
+
+The ablation data frame has been loaded for you.
+
+Create a scatter plot, coloring by Experiment and setting the shape by CellType.
+
+A p object has been given to you. Add a layer to the p object, binding color to Experiment and shape to Measurement. Add another layer to the p object, using a geom_line layer, and binding color to Experiment, linetype to CellType and group to `interaction(Experiment, Measurement, CellType)`. Run this `interaction` command in the console to understand what it does (you'll have to include the data frame name: `interaction(ablation$Experiment, ablation$Measurement, ablation$CellType)`). This composite factor is passed to the group aesthetic of geom_line() to inform ggplot which data values go together.
+
+
+*** =hint
+
+no hints yet
+
+*** =pre_exercise_code
+```{r}
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+library(ggplot2)
+```
+
+*** =sample_code
+```{r}
+# Create a scatter plot, coloring by Experiment and setting the shape by CellType
+
+
+# A base ggplot object.size
+
+
+# Add another layer to the p object, binding color to Experiment and shape to Measurement
+
+
+# Add another layer to the p object, using a geom_line layer, and binding color to Experiment, linetype to CellType and group to interaction(Experiment, Measurement, CellType)
+
+
+# Print the plot
+
+
+```
+
+*** =solution
+```{r}
+# Create a scatter plot, coloring by Experiment and setting the shape by CellType
+ggplot(ablation, aes(x = Time, y = Score)) +
+geom_point(aes(color = Experiment, shape = CellType), size = 4)
+
+# A base ggplot object.size
+p <- ggplot(ablation, aes(x = Time, y = Score))
+
+# Add another layer to the p object, binding color to Experiment and shape to Measurement
+p <- p + geom_point(aes(color = Experiment, shape = Measurement), size = 4)
+
+# Add another layer to the p object, using a geom_line layer, and binding color to Experiment, linetype to CellType and group to interaction(Experiment, Measurement, CellType)
+p <- p + geom_line(aes(group = interaction(Experiment, Measurement, CellType),
+color = Experiment,
+linetype = CellType))
+
+# Print the plot
+print(p)
+
+
+```
+
+*** =sct
+```{r}
+test_error()
+```
+--- type:NormalExercise lang:r xp:100 skills:1 key:831c68539b
+## Legends and scales
+Some layers don't plot data, but affect the plot in other ways. For example, there are layers that
+control plot labeling and plot theme. The labs() function can also modify legend labels.
+```
+p <- p + labs(title = "Ablation", x = "Time (minutes)", y = "% Saturation")
+p <- p + theme_bw()
+```
+
+ggplot gives you control over the scales of your plot. There is one scale for each binding. In the plot
+we just made, there are five scales that we can manipulate: the x and y axes and the three legends.
+Let's change our x-axis to include the 5 minute timepoint. This is achieved with yet another layer.
+`p + scale_x_continuous(breaks = c(0, 5, 10, 20, 30))`
+
+We can also manipulate legends with scale layers. Here we provide the labels for the Measurement scale (remember that we used an aesthetic to bind
+shape to Measurement). Note that ggplot will always order the labels according to the levels of the
+underlying factor, so the labels should be provided in that order. If you want to change the order in
+which the legend elements are displayed, change the underlying factor.
+We have also changed the title of the CellType legend (the linetype binding) to be two words and
+used a different color palette (for the binding to Experiment).
+```
+p <- p + scale_shape_discrete(labels = c("LDLR", "TfR")) +
+         scale_linetype_discrete(name = "Cell type") +
+         scale_color_brewer(palette = "Set1")
+```
+
+Note the general form of the scale layer functions:
+scale_aestype_colortype
+where the aestype is the bound aesthetic, and the colortype is the type of color associated with that
+binding. Common values for the colortype include:
+
+
+               | Color type
+ ------------- | ------------
+ hue           | Equally-spaced colors from the color wheel
+ manual        | Manually-specified values (e.g., colors, point shapes, line types)
+ gradient      | Color gradients
+ grey          | Shades of grey
+ discrete      | Discrete values (e.g., colors, point shapes, line types, point sizes)
+ continuous    | Continuous values (e.g., alpha, colors, point sizes)
+
+
+*** =instructions
+
+
+*** =hint
+
+no hints yet
+
+*** =pre_exercise_code
+```{r}
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+library(ggplot2)
+p <- ggplot(ablation, aes(x = Time, y = Score))
+p <- p + geom_point(aes(color = Experiment, shape = Measurement), size = 4)
+p <- p + geom_line(aes(group = interaction(Experiment, Measurement, CellType),
+color = Experiment,
+linetype = CellType))
+```
+
+*** =sample_code
+```{r}
+
 
 ```
 
@@ -27,5 +221,77 @@ description : Insert the chapter description here
 
 *** =sct
 ```{r}
+test_error()
+```
+--- type:NormalExercise lang:r xp:100 skills:1 key:05b0d38908
+## Faceting
+This plot is probably showing too much data at once. One approach to resolve this would be to make
+separate plots for the LDLR and TfR measurements. You can make multiple plots at once using
+`facet_grid()`. 
+```
+facet_grid(Measurement ~ .)
+```
+will make a separate figure for each Measurement.
 
+In these plots, you can remove the color and shape legends entirely (an option that can be specified
+in each of the respective legend layers):
+`p + scale_colour_discrete(guide = "none") + scale_shape_discrete(guide = "none")`
+or you may no longer want to bind the Measurement and Experiment variables to shape and color at all.
+The `facet_wrap()` function can be used to wrap a 1D ribbon of plots into a 2D layout.
+
+*** =instructions
+
+Use `facet_grid()` to make separate figures for each Measurement, and each Experiment. Experiment with switching each of these factors on either side of the `~`.
+*** =hint
+
+`facet_wrap()` needs a factor on the RHS of the tilde.
+
+*** =pre_exercise_code
+```{r}
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+library(ggplot2)
+p <- ggplot(ablation, aes(x = Time, y = Score))
+p <- p + geom_point(aes(color = Experiment, shape = Measurement), size = 4)
+p <- p + geom_line(aes(group = interaction(Experiment, Measurement, CellType),
+color = Experiment,
+linetype = CellType))
+```
+
+*** =sample_code
+```{r}
+# Facet the ablation figure by Experiment and Measurement
+
+
+# Facet the ablation figure by Measurement and Experiment
+
+
+# Recreate the entire plot, without binding Measurement and Experiment aesthetics
+
+
+# Use facet_wrap() to wrap plots by Experiment
+
+```
+
+*** =solution
+```{r}
+# Facet the ablation figure by Experiment and Measurement
+p + facet_grid(Experiment ~ Measurement)
+
+# Facet the ablation figure by Measurement and Experiment
+p + facet_grid(Measurement ~ Experiment)
+
+# Recreate the entire facetted plot, without binding Measurement and Experiment aesthetics
+p <- ggplot(ablation, aes(x = Time, y = Score))
+p <- p + geom_point(size = 4)
+p <- p + geom_line(aes(linetype = CellType))
+p + facet_grid(Measurement ~ Experiment)
+
+# Use facet_wrap() to wrap plots by Experiment
+p + facet_wrap( ~ Experiment)
+
+```
+
+*** =sct
+```{r}
+test_error()
 ```
