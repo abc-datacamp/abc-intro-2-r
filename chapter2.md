@@ -456,6 +456,31 @@ state.name[state.area == max(state.area)]
 
 *** =sct
 ```{r}
+test_predefined_objects("colors")
+test_function("length", args = "x",
+              not_called_msg = "Use the `length()` function to count the number of elements in the `colors` vector",
+              args_not_specified_msg = "Have you specified the argument to the `length()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`colors`) to the `length()` function?")
+test_function("sort", args = c("x", "decreasing"),
+              not_called_msg = "Use the `sort()` function to sort the elements of a vector",
+              args_not_specified_msg = "Have you specified both arguments to the `sort()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`colors`, `decreasing = TRUE`) to the `sort()` function?")
+test_function("order", args = c("..."),
+              not_called_msg = "Use the `order()` function to get the ordered indices of a vector",
+              args_not_specified_msg = "Have you specified the argument to the `order()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`colors`) to the `order()` function?")
+ex() %>% check_output_expr("state.name[order(state.area)]", 
+              missing_msg = "Use the ordered vector `order(state.area)` to index state.name.")
+test_function("sample", args = c("x", "size"),
+              not_called_msg = "Use the `sample()` function to randomly sample elements of a vector",
+              args_not_specified_msg = "Have you specified both arguments to the `sample()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`state.name`, `4`) to the `sample()` function?")
+test_function("max", args = c("..."),
+              not_called_msg = "Use the `max()` function to return the largest element of a vector",
+              args_not_specified_msg = "Have you specified the argument to the `max()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`state.area`) to the `max()` function?")
+ex() %>% check_output_expr("state.name[state.area == max(state.area)]", 
+              missing_msg = "Use the logical vector `state.area == max(state.area)` to index state.name.")
 test_error()
 ```
 
@@ -505,7 +530,7 @@ colors <- c("red", "orange", "yellow", "green", "blue", "indigo", "violet")
 # Plot the pony.colors.f factor to see how often each factor appears
 
 
-# Ensure the levels are in the same order as the colors vector
+# Assign a new factor, pony.colors.f2, where the levels are in the same order as the colors vector
 
 
 
@@ -513,7 +538,7 @@ colors <- c("red", "orange", "yellow", "green", "blue", "indigo", "violet")
 
 *** =solution
 ```{r}
-# Generate a vector of 500 colors, called pony.colors, from the colors vector
+# Generate a vector of 500 colors, called pony.colors, randomly sampled from the colors vector
 pony.colors <- sample(colors, size = 500, replace = TRUE)
 
 # Convert this to a factor called pony.colors.f using the factor() function
@@ -525,17 +550,40 @@ str(pony.colors.f)
 # Plot the pony.colors.f factor to see how often each factor appears
 plot(pony.colors.f)
 
-# Ensure the levels are in the same order as the colors vector
+# Assign a new factor, pony.colors.f2, where the levels are in the same order as the colors vector
 pony.colors.f2 <- factor(pony.colors, levels = colors)
 
 ```
 
-*** =hint
-no hints yet
 
 *** =sct
 ```{r}
 test_predefined_objects("colors")
+test_function("sample", args = c("x", "size", "replace"),
+              not_called_msg = "Use the `sample()` function to randomly sample elements in the `colors` vector",
+              args_not_specified_msg = "Have you specified all the arguments to the `sample()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`colors`, `size = 500`, `replace = TRUE`) to the `sample()` function?")
+test_object("pony.colors",
+              undefined_msg = "Assign 500 colors randomly sampled from the `colors` vector to `pony.colors`",
+              incorrect_msg = "Use `sample(colors, size = 500, replace = TRUE)` to randomly sample 500 colors.")
+test_object("pony.colors.f",
+              undefined_msg = "Assign pony.colors.f using `factor()` to convert a vector to a factor.",
+              incorrect_msg = "Did you use the `pony.colors` vector as an argument to `factor()`?")
+test_function("str", args = c("object"),
+              not_called_msg = "Use the `str()` function to display the internal structure of an object.",
+              args_not_specified_msg = "Have you specified the argument to the `str()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`pony.colors.f`) to the `str()` function?")
+test_function("plot", args = "x",
+              not_called_msg = "Use the `plot()` function to display the frequency of each level of a factor.",
+              args_not_specified_msg = "Have you specified the argument to the `plot()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`pony.colors.f`) to the `plot()` function?")
+test_object("pony.colors.f2",
+              undefined_msg = "Assign pony.colors.f2 using the `colors` vector to determine the levels.",
+              incorrect_msg = "Did you use the `colors` vector to determine the levels of `pony.colors.f2`?")
+test_function("factor", args = c("x", "levels"), index = 2,
+              not_called_msg = "Use the `factor()` function to display the internal structure of an object.",
+              args_not_specified_msg = "Have you specified both arguments to `factor()`?",
+              incorrect_msg = "Have you passed in the correct arguments (`pony.colors`, `levels = colors`) to `factor()`?")
 test_error()
 ```
 
