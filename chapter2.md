@@ -121,16 +121,16 @@ colors <- c("red", "orange", "yellow", "green", "blue", "indigo", "violet")
 # Generate a vector of numbers from 1 to 99
 
 
-# Generate a vector which is the colors vector twice. The colors vector has been preloaded for you.
+# Repeat the entire colors vector twice. The colors vector has been preloaded for you.
 
 
-# Repeat each element of the colors vector
+# Repeat each element of the colors vector twice
 
 
-# xx difference between each and times
+# Repeat the colors vector, setting both the times and each parameters to 2
 
 
-# xx When using the length.out argument, you may not get a full cycle of repetition.
+# Repeat the colors vector, such that the result has 10 elements. When using the length.out argument, you may not get a full cycle of repetition.
 
 
 # Can you predict what the following code will do?
@@ -149,16 +149,16 @@ seq(0, 1, by = 0.1)
 # Generate a vector of numbers from 1 to 99
 seq(to = 99)
 
-# Generate a vector which is the colors vector twice. The colors vector has been preloaded for you.
+# Repeat the colors vector twice. The colors vector has been preloaded for you.
 rep(colors, times = 2)
 
-# Repeat each element of the colors vector
+# Repeat each element of the colors vector twice
 rep(colors, each = 2)
 
-# xx difference between each and times
+# Repeat the colors vector, setting both the times and each parameters to 2
 rep(colors, each = 2, times = 2)
 
-# xx When using the length.out argument, you may not get a full cycle of repetition.
+# Repeat the colors vector, such that the result has 10 elements. When using the length.out argument, you may not get a full cycle of repetition.
 rep(colors, length.out = 10)
 
 # Can you predict what the following code will do?
@@ -166,10 +166,45 @@ rep(colors, length.out = 10)
 
 ```
 
+*** =hint
+Read the help pages for `seq()` and `rep()`, e.g., `?seq`.
+If you don't explicitly set a parameter, the default will be used.
+
+Carefully consider how many vector elements there are between 0 and 1, when incrementing by 0.1!
+
 
 *** =sct
 ```{r}
-
+test_predefined_objects("colors")
+test_function("seq", args = c("from", "length.out"), index = 1,
+              not_called_msg = "Use the `seq()` function with `length.out` to generate a vector of numbers with a fixed number.",
+              args_not_specified_msg = "Have you specified three arguments to the `seq()` function (to, from and length.out)?",
+              incorrect_msg = "Have you passed in the correct arguments (`from` = `0`, `to` = `1`, `length.out` = `11`) to the `seq()` function? The `length.out` parameter should be 11!")
+#test_function_result("seq", index = 1, incorrect_msg = "Check your `seq()` call. Are you passing in the correct arguments (`to` = `0`, `from` = `1`, `length.out` = `11`)?")  
+test_function("seq", args = c("from", "by"), index = 2,
+              not_called_msg = "Use the `seq()` function to generate a vector of numbers, where regular increments are defined by the `by` parameter.",
+              args_not_specified_msg = "Have you specified three arguments to the `seq()` function (to, from and by)?",
+              incorrect_msg = "Have you passed in the correct arguments (`0`, `1`, `0.1`) to the `seq()` function?")
+test_function("seq", args = c("to"), index = 3,
+              not_called_msg = "Use the `seq()` function to generate a regularly incremented vector of numbers.",
+              args_not_specified_msg = "Have you specified the correct argument to the `seq()` function (by)?",
+              incorrect_msg = "Have you passed in the correct arguments (`to` = `99`) to the `seq()` function?")
+test_function("rep", args = c("x", "times"), index = 1,
+              not_called_msg = "Use the `rep()` function with `times` to repeat an entire vector a fixed number of times.",
+              args_not_specified_msg = "Did you specify the vector you want to repeat (`colors`)? Have you specified the correct number of times the `colors` vector should be repeated (2)?",
+              incorrect_msg = "Have you passed in the correct argument (`times` = `2`) to the `rep()` function?")
+test_function("rep", args = c("x", "each"), index = 2,
+              not_called_msg = "Use the `rep()` function with `each` to repeat each element of a vector a fixed number of times.",
+              args_not_specified_msg = "Did you specify the vector you want to repeat (`colors`)? Have you specified the correct number of times each element of the `colors` vector should be repeated (2)?",
+              incorrect_msg = "Have you passed in the correct arguments (`each` = `2`) to the `rep()` function?")
+test_function("rep", args = c("x", "each", "times"), index = 3,
+              not_called_msg = "Use the `rep()` function with `each` and `times`.",
+              args_not_specified_msg = "Did you specify the vector you want to repeat (`colors`)? Have you specified the correct arguments to the `rep()` function (each, times)?",
+              incorrect_msg = "Have you passed in the correct arguments (`each` = `2`, `times` = `2`) to the `rep()` function?")
+test_function("rep", args = c("x", "length.out"), index = 4,
+              not_called_msg = "Use the `length.out` parameter to set the number of elements in the generated vector.",
+              args_not_specified_msg = "Did you specify the vector you want to repeat (`colors`)? Have you specified the correct argument to the `rep()` function (length.out)?",
+              incorrect_msg = "Have you passed in the correct arguments (`length.out` = `10`) to the `rep()` function?")
 test_error()
 ```
 
@@ -193,6 +228,10 @@ Another means of accessing vector elements is using a logical indexing vector in
 We can test for membership in a vector using the `%in%` operator. For example, `"Rhode Island" %in% state.name[state.area < 56220]` will test if Rhode Island is in the smaller half of states.
 
 
+*** =pre_exercise_code
+```{r}
+colors <- c("red", "orange", "yellow", "green", "blue", "indigo", "violet")
+```
 
 
 *** =instructions
@@ -204,8 +243,7 @@ Use a logical vector to find the smallest states.
 *** =sample_code
 ```{r}
 # Find the first quartile value of state areas by running the summary() function on the state.area built-in vector.
-which(state.area > cutoff)
-state.name[which(state.area > cutoff)]
+
 
 # Assign it to a variable called cutoff
 
@@ -216,7 +254,7 @@ state.name[which(state.area > cutoff)]
 # List out the state names of those states smaller than the cutoff, using the logical vector as an indexing vector
 
 
-# Use the %in% operator to test in "New York" is one of the smallest states.
+# Use the %in% operator to test if "New York" is one of the smallest states.
 
 
 
@@ -235,21 +273,31 @@ cutoff <- 37320
 state.area < cutoff
 
 # List out the state names of those states smaller than the cutoff, using the logical vector as an indexing vector
-state.name[state.area < 37320]
+state.name[state.area < cutoff]
 
-# Use the %in% operator to test in "New York" is one of the smallest states.
+# Use the %in% operator to test if "New York" is one of the smallest states.
 "New York" %in% state.name[state.area < cutoff]
 
 
 
 ```
 
+*** =hint
+Run `summary(state.area)` to find the first quartile value.
+
 
 *** =sct
 ```{r}
-test_object("cutoff")
+ex() %>% check_output_expr("summary(state.area)", 
+             missing_msg = "Run `summary(state.area) to get the first quartile value of the states' area.")
+test_object("cutoff",
+                    undefined_msg = "Assign the first quartile value of the states' area to `cutoff`",
+                    incorrect_msg = "Did you assign the correct value to cutoff? Check the output from summary(state.area).")
 test_output_contains("state.area < cutoff",
-                    incorrect_msg = "Did you assign the correct value to cutoff?")
+                    incorrect_msg = "`state.area < cutoff` generates a vector where each element indicates whether that state is less than the cutoff or not.")
+test_output_contains("state.name[state.area < cutoff]",
+                    incorrect_msg = "Use the logical vector to index state.name. Put the logical vector inside `[]`")
+ex() %>% check_operator("%in%") %>% check_result("Use `'New York' %in% state.name[state.area < cutoff]` to determine if New York is one of the smaller states.") %>% check_equal()
 test_error()
 ```
 
@@ -312,6 +360,15 @@ state.area[state.area < cutoff]
 
 *** =sct
 ```{r}
+test_predefined_objects("cutoff")
+test_object("state.area",
+                    undefined_msg = "Did you assign the state names to the state.area vector? Use the `names()` function.",
+                    incorrect_msg = "Did you assign the state names to the state.area vector? Use the `names()` function.")
+ex() %>% check_output_expr("state.area[c('New York', 'Alaska')]", 
+             missing_msg = "Use the character vector `c('New York', 'Alaska')` to index state.area.")
+test_output_contains("state.area[state.area < cutoff]",
+                    incorrect_msg = "Try running `state.area[state.area < cutoff]`.")
+
 test_error()
 ```
 

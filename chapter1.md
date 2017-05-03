@@ -196,7 +196,7 @@ Assign the given numeric values for `US.population` and `US.area` and calculate 
 # Calculate the US.pop.density by dividing US.population by US.area
 
 
-# R will not automatically print out the value of an assigned variable. Type the name of the variable by itself to see it.
+# What is the value of US.pop.density? R will not automatically print out the value of an assigned variable. Type the name of the variable by itself to see it.
 
 
 ```
@@ -212,7 +212,7 @@ US.area <- 3719000
 # Calculate the US.pop.density by dividing US.population by US.area
 US.pop.density <- US.population / US.area
 
-# R will not automatically print out the value of an assigned variable. Type the name of the variable by itself to see it.
+# What is the value of US.pop.density? R will not automatically print out the value of an assigned variable. Type the name of the variable by itself to see it.
 US.pop.density
 
 ```
@@ -243,9 +243,9 @@ R can convert between datatypes using a series of `as.()` methods, e.g., `as.num
 *** =instructions
 
 When working with truth values, you can use the logical operators: <br/>
-AND (&) <br/>
-OR (|) <br/>
-NOT (!)
+& (AND) <br/>
+| (OR) <br/>
+! (NOT)
 
 Show that R uses tri-state logic when working with truth values by combining logical data types with the different operators.
 
@@ -286,13 +286,16 @@ is.a.minor <- TRUE
 has.diabetes & ! is.enrolled & ! is.a.minor
 ```
 
+*** =hint
+Use the symbols for the logical operators.
+
 
 *** =sct
 ```{r}
 test_predefined_objects("has.diabetes")
-test_object("is.enrolled", incorrect_msg = "Did you set `is.enrolled` to `FALSE`? Note uppercase!")
-test_object("is.candidate")
-test_object("is.a.minor")
+test_object("is.enrolled", undefined_msg = "Did you correctly spell `is.enrolled` and set it to `FALSE`? Note uppercase!?", incorrect_msg = "Did you set `is.enrolled` to `FALSE`? Note uppercase!")
+test_object("is.candidate", undefined_msg = "Did you correctly spell `is.candidate`?")
+test_object("is.a.minor", undefined_msg = "Did you correctly spell `is.a.minor`?")
 test_error()
 ```
 
