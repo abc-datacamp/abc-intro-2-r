@@ -634,7 +634,7 @@ coercion?
 # Get all Private Education and Personal Care expeditures for all years
 
 
-# Return the Personal Care expenditures from all years, as a matrix
+# Return the "Medical and Health" expenditures from all years, as a matrix
 
 
 # Assign the element for Personal Care in 1955 as unknown, such that the elements of the matrix are not coerced to characters
@@ -656,8 +656,8 @@ USPersonalExpenditure["Food and Tobacco", "1950"]
 # Get all Private Education and Personal Care expeditures for all years
 USPersonalExpenditure[c("Private Education", "Personal Care"), ]
 
-# Return the Personal Care expenditures from all years, as a matrix
-USPersonalExpenditure["Personal Care",  , drop = FALSE]
+# Return the "Medical and Health" expenditures from all years, as a matrix
+USPersonalExpenditure["Medical and Health",  , drop = FALSE]
 
 # Assign the element for Personal Care in 1955 as unknown, such that the elements of the matrix are not coerced to characters
 USPersonalExpenditure["Personal Care", "1955"] <- NA
@@ -686,8 +686,8 @@ test_student_typed("USPersonalExpenditure['Food and Tobacco', '1950']",
               not_typed_msg = "`USPersonalExpenditure['Food and Tobacco', '1950']` uses 'Food and Tobacco' to indicate the row and '1950' to indicate the column.")
 test_student_typed("USPersonalExpenditure[c('Private Education', 'Personal Care'), ]",
               not_typed_msg = "`USPersonalExpenditure[c('Private Education', 'Personal Care'), ]` selects the 'Private Education' and 'Personal Care' rows from the original matrix.")
-test_output_contains("USPersonalExpenditure['Personal Care',  , drop = FALSE]",
-              incorrect_msg = "`USPersonalExpenditure['Personal Care',  , drop = FALSE]` generates a 1-row matrix.")
+test_output_contains("USPersonalExpenditure['Medical and Health',  , drop = FALSE]",
+              incorrect_msg = "`USPersonalExpenditure['Medical and Health',  , drop = FALSE]` generates a 1-row matrix.")
 test_student_typed("USPersonalExpenditure['Personal Care', '1955'] <- NA",
               not_typed_msg = "Assigning an element as NA does not coerce the rest of the matrix.")
 test_error()
