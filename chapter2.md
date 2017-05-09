@@ -688,8 +688,8 @@ test_student_typed("USPersonalExpenditure[c('Private Education', 'Personal Care'
               not_typed_msg = "`USPersonalExpenditure[c('Private Education', 'Personal Care'), ]` selects the 'Private Education' and 'Personal Care' rows from the original matrix.")
 test_output_contains("USPersonalExpenditure['Personal Care',  , drop = FALSE]",
               incorrect_msg = "`USPersonalExpenditure['Personal Care',  , drop = FALSE]` generates a 1-row matrix.")
-test_output_contains("USPersonalExpenditure['Personal Care', '1955'] <- NA",
-              incorrect_msg = "Assigning an element as NA does not coerce the rest of the matrix.")
+test_student_typed("USPersonalExpenditure['Personal Care', '1955'] <- NA",
+              not_typed_msg = "Assigning an element as NA does not coerce the rest of the matrix.")
 test_error()
 ```
 
@@ -902,7 +902,7 @@ As with matrices, the rows can be given names, using `rownames()`. Column names 
 New columns are added the same way you would add one to a list.
 
 Many tools in R work naturally with data frames. Read the help pages for the`plot()` function. The code for visualizing the size distribution of
-state within each division is provided for you. Read the first argument as "area as a function of division". 
+states within each division is provided for you. Read the first argument as "area as a function of division". 
 
 
 
@@ -923,7 +923,7 @@ state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsA
 # Add state.division to the data frame as a column called division
 
 
-# Use plot() to visualize the size distribution of state within each division
+# Use plot() to visualize the size distribution of states within each division
 plot(area ~ division, data = state.db)
 
 # Use plot() to visualize latitude as a function of longtitude
@@ -949,7 +949,7 @@ state.db$abb
 # Add state.division to the data frame as a column called division
 state.db$division <- state.division
 
-# Use plot() to visualize the size distribution of state within each division
+# Use plot() to visualize the size distribution of states within each division
 plot(area ~ division, data = state.db)
 
 # Use plot() to visualize latitude as a function of longtitude
@@ -970,11 +970,11 @@ test_data_frame("state.db", columns = "division",
               undefined_msg = "Make sure not to remove `state.db`!",
               undefined_cols_msg = "Have you added the column `division` to `state.db`?",
               incorrect_msg = "Have you correctly assigned the column `division` from the `state.division` vector?")
-test_function("plot", args = "x", index = 1,
+test_function("plot", index = 1,
               not_called_msg = "Use the `plot()` function to display the area as a function of division.",
               args_not_specified_msg = "Have you specified the argument to the `plot()` function?",
               incorrect_msg = "Have you passed in the correct arguments (`area ~ division, data = state.db`) to the `plot()` function?")
-test_function("plot", args = "x", index = 2,
+test_function("plot",  index = 2,
               not_called_msg = "Use the `plot()` function to display the latitude as a function of longitude.",
               args_not_specified_msg = "Have you specified the argument to the `plot()` function?",
               incorrect_msg = "Have you passed in the correct arguments (`lat ~ long, data = state.db`) to the `plot()` function?")
@@ -1036,7 +1036,7 @@ state.db$division <- state.division
 *** =solution
 ```{r}
 # Extract the longitude and latitude of the centers of New York, New Jersey and Rhode Island  
-state.db[c("NY", "NJ", "CT", "RI"), c("long", "lat")]
+state.db[c("NY", "NJ", "RI"), c("long", "lat")]
 
 # Extract the names of all states where the area of the state is less than the median, using a logical indexing vector
 state.db[state.db$area < median(state.db$area), "name"]
@@ -1051,10 +1051,21 @@ subset(state.db, division %in% c("New England", "Middle Atlantic", "South Atlant
 ```
 
 *** =hint
-no hints yet
+The `%in%` operator returns a logical vector.
 
 *** =sct
 ```{r}
+test_predefined_objects("state.db")
+test_output_contains("state.db[c('NY', 'NJ', 'RI'), c('long', 'lat')]",
+              incorrect_msg = "Did you use the state abbreviations for the row indexing vector? Did you select the `long` and `lat` columns?")
+test_output_contains("state.db[state.db$area < median(state.db$area), 'name']",
+              incorrect_msg = "Did you use a logical indexing vector to select rows? Did you select the `name` column?")
+test_function("subset", args = c("x"), index = 1,
+              not_called_msg = "Use `subset()` to subset the `state.db` data frame.",
+              args_not_specified_msg = "Have you specified all the arguments to the `subset()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`state.db, area < median(area), select = name`) to the `subset()` function?")
+test_output_contains("subset(state.db, division %in% c('New England', 'Middle Atlantic', 'South Atlantic', 'Pacific') )",
+              incorrect_msg = "Did you use `%in%` to find the states in selected divisions? Did you list all the divisions?")
 test_error()
 ```
 
