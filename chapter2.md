@@ -759,7 +759,6 @@ test_object("m",
 test_object("m2",
             undefined_msg = "Assign a new matrix to `m2`.",
             incorrect_msg = "Did you assign the correct value to `m2`? Use `cbind()`.")
-
 test_error()
 ```
 
@@ -849,7 +848,7 @@ my.model <- lm(edu.spend ~ edu.yr)
 slope <- my.model$coefficients["edu.yr"]
 
 # Extract the intercept (also from the coefficients component) into a variable called intercept
-slope <- my.model$coefficients["(Intercept)"]
+intercept <- my.model$coefficients["(Intercept)"]
 
 # Run summary() on the my.model object and save it to a variable called model.summary
 model.summary <- summary(my.model)
@@ -861,10 +860,22 @@ model.summary$r.squared
 ```
 
 *** =hint
-Use an indexing vector to extract the correct element from the coefficients component
+Use an indexing vector to extract the correct element from the coefficients component.
 
 *** =sct
 ```{r}
+test_predefined_objects(c("edu.spend", "edu.yr", "my.model"))
+test_object("slope",
+            undefined_msg = "Assign the slope of the best-fit line to `slope`",
+            incorrect_msg = "Did you assign the correct value to `slope`? Use the coefficients component of `my.model`.")
+test_object("intercept",
+            undefined_msg = "Assign the intercept of the best-fit line to `intercept`",
+            incorrect_msg = "Did you assign the correct value to `intercept`? Use the coefficients component of `my.model`.")
+test_object("model.summary",
+            undefined_msg = "Assign the summary of my.model to `model.summary`",
+            incorrect_msg = "Did you assign the correct value to `model.summary`? Use `summary()`.")
+test_output_contains("model.summary$r.squared",
+              incorrect_msg = "`model.summary$r.squared` will print the r.squared component of the model.summary list object.")
 test_error()
 ```
 
@@ -894,23 +905,19 @@ Many tools in R work naturally with data frames. Read the help pages for the`plo
 state within each division is provided for you. Read the first argument as "area as a function of division". 
 
 
-*** =pre_exercise_code
-```{r}
-state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
-```
-
 
 *** =sample_code
 ```{r}
 # Combine different data about US states into a single data frame
 state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
 
-# Access the state abbreviations column using list notation. Convince yourself that state.db$state.abb, state.db[[ "state.abb" ]] and state.db[[ 2 ]] all give the same result.
-
 # Name the rows of state.db using state abbreviations from state.abb
 
 
 # Update the column names: "name", "abb", "area", "long", "lat"
+
+
+# Access the state abbreviations column using list notation. Convince yourself that state.db$state.abb, state.db[[ "state.abb" ]] and state.db[[ 2 ]] all give the same result.
 
 
 # Add state.division to the data frame as a column called division
@@ -930,14 +937,14 @@ plot(area ~ division, data = state.db)
 # Combine different data about US states into a single data frame
 state.db <- data.frame(state.name, state.abb, state.area, state.center, stringsAsFactors = FALSE)
 
-# Access the state abbreviations column using list notation. Convince yourself that state.db$state.abb, state.db[[ "state.abb" ]] and state.db[[ 2 ]] all give the same result.
-state.db$state.abb
-
 # Name the rows of state.db using state abbreviations from state.abb
 rownames(state.db) <- state.abb
 
 # Update the column names: "name", "abb", "area", "long", "lat"
 names(state.db) <- c("name", "abb", "area", "long", "lat")
+
+# Access the state abbreviations column using list notation. Convince yourself that state.db$abb, state.db[[ "abb" ]] and state.db[[ 2 ]] all give the same result.
+state.db$abb
 
 # Add state.division to the data frame as a column called division
 state.db$division <- state.division
@@ -952,14 +959,25 @@ plot(lat ~ long, data = state.db)
 ```
 
 *** =hint
-You can access a column in a data frame using list notation. `state.db$state.abb`, `state.db[[ "state.abb" ]]` and `state.db[[ 2 ]]` all work!
+You can access a column in a data frame using list notation. `state.db$abb`, `state.db[[ "abb" ]]` and `state.db[[ 2 ]]` all work!
 
 
 *** =sct
 ```{r}
-test_predefined_objects("state.db")
-test_output_contains("state.db$state.abb",
-                         incorrect_msg = "Check your syntax when printing out the state abbreviations column?")
+test_output_contains("state.db$abb",
+              incorrect_msg = "Check your syntax when printing out the state abbreviations column?")
+test_data_frame("state.db", columns = "division",
+              undefined_msg = "Make sure not to remove `state.db`!",
+              undefined_cols_msg = "Have you added the column `division` to `state.db`?",
+              incorrect_msg = "Have you correctly assigned the column `division` from the `state.division` vector?")
+test_function("plot", args = "x", index = 1,
+              not_called_msg = "Use the `plot()` function to display the area as a function of division.",
+              args_not_specified_msg = "Have you specified the argument to the `plot()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`area ~ division, data = state.db`) to the `plot()` function?")
+test_function("plot", args = "x", index = 2,
+              not_called_msg = "Use the `plot()` function to display the latitude as a function of longitude.",
+              args_not_specified_msg = "Have you specified the argument to the `plot()` function?",
+              incorrect_msg = "Have you passed in the correct arguments (`lat ~ long, data = state.db`) to the `plot()` function?")
 test_error()
 ```
 
