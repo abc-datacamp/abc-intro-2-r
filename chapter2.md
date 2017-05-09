@@ -44,11 +44,15 @@ test_mc(correct = 4,
 Many commands in R take vectors as input, e.g., `sum(x)`, `max(x)`, `summary(x)`.
 
 There are many ways of creating vectors. The most common way is using the `c()` function, where `c` stands for `concatention`. We can create a vector of character strings, for example, using 
+
 `colors <- c("red", "orange", "yellow", "green", "blue", "indigo", "violet")`. 
+
 Note that character strings must be quoted.
 
 The `c()` function can also combine vectors. 
+
 `colors <- c("infrared", colors, "ultraviolet")`
+
 By assigning the result back to the `colors` variable, we are updating its value.
 The net effect is to both prepend and append new colors to the original `colors`
 vector. Remember that "infrared" is a one-element vector!
@@ -216,6 +220,7 @@ Vector elements are accessed using indexing vectors, which can be numeric, chara
 You can access an individual element of a vector by its position (or "index"), indicated using square brackets. In R, the first element has an index of 1. To get the 7th element of the  `colors` vector:
 `colors[7]`.
 You can also change the elements of a vector using the same notation as you use to access them:
+
 `colors[7] <- "purple"`.
 
 You can access multiple elements of a vector by specifying a vector of element indices inside the square brackets. All the methods that we learned about in the last section can be used to generate these indexing vectors. For example, 
@@ -223,9 +228,17 @@ You can access multiple elements of a vector by specifying a vector of element i
 
 We can select specific elements based on whether they pass some criterion, using the `which()` function. This takes a vector and returns a numeric vector of the indices of the elements which pass the test. 
 
-Another means of accessing vector elements is using a logical indexing vector in the square brackets, where the elements that are returned are those where the logical element is `TRUE`. For example, `state.area[state.name == "Wyoming"]`. Here, the `==` is a test for equality. This is different from assignment.
+Another means of accessing vector elements is using a logical indexing vector in the square brackets, where the elements that are returned are those where the logical element is `TRUE`. For example, 
 
-We can test for membership in a vector using the `%in%` operator. For example, `"Rhode Island" %in% state.name[state.area < 56220]` will test if Rhode Island is in the smaller half of states.
+`state.area[state.name == "Wyoming"]`. 
+
+Here, the `==` is a test for equality. This is different from assignment.
+
+We can test for membership in a vector using the `%in%` operator. For example, 
+
+`"Rhode Island" %in% state.name[state.area < 56220]` 
+
+will test if Rhode Island is in the smaller half of states.
 
 
 *** =pre_exercise_code
@@ -305,17 +318,22 @@ test_error()
 ## Named vectors
 
 Vector elements can be named using the `names()` function: 
+
 `names(state.area) <- state.name`.
+
 We have already seen this: the result of the `summary()` function is a named vector! 
 
 We can access elements using a character indexing vector, where the index refers to the name(s) of the elements.
 For exmple, we can access Wyoming directly:
+
 `state.area["Wyoming"]`.
 
 We can see all the small states and their areas in one shot:
+
 `state.area[state.area < cutoff]`
 
 Sadly, not all functions that fetch an element from a vector keep the associated name, e.g., `min(state.area)`, but you can find the index at which the minimum occurs, and use that.
+
 `state.area[which.min(state.area)]`
 
 To remove all names from vector elements, use the `unname()` function.
@@ -382,15 +400,18 @@ R supports sorting, using the `sort()` and `order()` functions, which return the
 We can also randomly sample elements from a vector, using `sample()`.
 
 Other miscellaneous useful commands on vectors include:
-`rev(x)` reverses the vector <br/>
-`sum(x)` sums all the elements in a numeric or logical vector <br/>
-`cumsum(x)` returns a vector of cumulative sums (or a running total) <br/>
-`diff(x)` returns a vector of differences between adjacent elements <br/> 
-`max(x)` returns the largest element <br/>
-`min(x)` returns the smallest element <br/>
-`range(x)` returns a vector of the smallest and largest elements <br/>
-`mean(x)` returns the arithmetic mean
 
+
+ Command       | Function
+ ------------- | ------------
+`rev(x)`       | Reverses the vector
+`sum(x)`       | Sums all the elements in a numeric or logical vector
+`cumsum(x)`    | Returns a vector of cumulative sums (or a running total)
+`diff(x)`      | Returns a vector of differences between adjacent elements
+`max(x)`       | Returns the largest element
+`min(x)`       | Returns the smallest element
+`range(x)`     | Returns a vector of the smallest and largest elements
+`mean(x)`      | Returns the arithmetic mean
 
 
 
@@ -701,7 +722,10 @@ There are a few ways to make a new matrix. The `matrix()` function takes as argu
 the elements, and then some information about how many rows and columns there are. By default, the matrix
 is filled in column order, but you can change this behaviour with the `by.rows=TRUE` option.
 
-For example, `game1 <- matrix(c("X","","O","","X","O","","",""), ncol = 3)`
+For example, 
+
+`game1 <- matrix(c("X","","O","","X","O","","",""), ncol = 3)`
+
 creates a tic-tac-toe game. 
 In this matrix, the rows and columns are not named, and can only be accessed using numeric
 indices.
@@ -774,8 +798,15 @@ modeled.
 
 Lists can be created using the list() function. When using the `list()` function, you can optionally
 give names to the components (component names are called tags).
-`pete <- list("Peter", "O'Toole", 1932, FALSE)`
-`pete <- list(first.name = "Peter", last.name = "O'Toole", yob = 1932, oscar.winner = FALSE)`
+
+```
+pete <- list("Peter", "O'Toole", 1932, FALSE)
+pete <- list(first.name = "Peter", 
+             last.name = "O'Toole", 
+             yob = 1932, 
+             oscar.winner = FALSE)
+```
+
 Note that we have different data types in the same list (character, numeric and logical). Note also
 the difference between the first and second attempt to model a great actor. In the first case, you need
 to know what the position of each component is; in the second, each component is named (tagged)
@@ -992,8 +1023,11 @@ based on a logical expression and can choose columns with the select option. Wit
 we only have to type the dataset name once.
 
 The logical condition is optional, and you can specify columns to omit instead of columns to include.
-`subset(state.db, select = c(name, abb))`
-`subset(state.db, select = -c(long, lat))`
+
+```
+subset(state.db, select = c(name, abb))
+subset(state.db, select = -c(long, lat))
+```
 
 
 *** =instructions

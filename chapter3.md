@@ -8,7 +8,12 @@ free_preview  : true
 Although R has some basic plotting functionality which we have seen hints of, the ggplot2 package is
 more comprehensive and consistent.
 
-There are many ways to install a package. The main three are: from CRAN, using `install.packages(packagename)`; from Bioconductor, using `biocLite(packagename)`, and from GitHub, using `install.packages("devtools"); devtools::install_github("username/packagename")`
+There are many ways to install a package. The main three are: from CRAN, using `install.packages(packagename)`; from Bioconductor, using `biocLite(packagename)`, and from GitHub, using 
+
+```
+install.packages("devtools")
+devtools::install_github("username/packagename")
+```
 
 After installing a package, to load a library into an R session, use `library()`.
 
@@ -17,10 +22,16 @@ a. The dataset (which must be a data frame), and the variable(s) you want to plo
 b. The type of plot you want to make.
 
 Aesthetics are used to bind plotting parameters to your data. Thus
-`ggplot(ablation, aes(x = Time, y = Score)) + geom_point()`
+
+```
+ggplot(ablation, aes(x = Time, y = Score)) + geom_point()
+```
+
 will take the data from the ablation data frame, plotting the Time column on the x-axis versus the Score column on the y-axis. The `geom_point()` layer indicates that we wish to plot a scatter plot.
 
-`ggplot(ablation, aes(x = Time, y = Score)) + geom_point(color = "red", size = 4)`
+```
+ggplot(ablation, aes(x = Time, y = Score)) + geom_point(color = "red", size = 4)
+```
 
 
 *** =instructions
@@ -79,9 +90,17 @@ test_error()
 ## Layers
 Layers are added to the ggplot object with `+`, just as we saw before, using `+ geom_point()` to add the scatterplot layer.
 The aesthetics that are used to bind plotting parameters to your data can be specific to each layer. Thus, 
-`g <- ggplot(ablation, aes(x = Time, y = Score))`
+
+```
+g <- ggplot(ablation, aes(x = Time, y = Score))
+```
+
 creates a base ggplot object called `g`, binding the x and y axes.
-`g <- g + geom_point(aes(color = Experiment), size = 4)`
+
+```
+g <- g + geom_point(aes(color = Experiment), size = 4)
+```
+
 adds a scatterplot layer to the `g` object, with its own binding of the color aesthetic. In addition to `x`, `y`, `color`, other aesthetics include: shape, size, linetype, fill, alpha, group.
 
 Any bindings defined in the base ggplot object are inherited by all layers (but can be overridden by any individual layer's aesthetic).
@@ -98,12 +117,8 @@ plot should be, what the best scale is, etc.
 
 The ablation data frame has been loaded for you.
 
-A p object has been given to you. Add a layer to the p object, binding color to Experiment and shape to Measurement. Add another layer to the p object, using a geom_line layer, and binding color to Experiment, linetype to CellType and group to `interaction(Experiment, Measurement, CellType)`. Run this `interaction` command in the console to understand what it does (you'll have to include the data frame name: `interaction(ablation$Experiment, ablation$Measurement, ablation$CellType)`). This composite factor is passed to the group aesthetic of geom_line() to inform ggplot which data values go together.
+A p object has been given to you. Add a layer to the p object, binding color to Experiment and shape to Measurement. Add another layer to the p object, using a geom\_line layer, and binding color to Experiment, linetype to CellType and group to `interaction(Experiment, Measurement, CellType)`. Run this `interaction` command in the console to understand what it does (you'll have to include the data frame name: `interaction(ablation$Experiment, ablation$Measurement, ablation$CellType)`). This composite factor is passed to the group aesthetic of geom\_line() to inform ggplot which data values go together.
 
-
-*** =hint
-
-no hints yet
 
 *** =pre_exercise_code
 ```{r}
@@ -175,7 +190,10 @@ p <- p + theme_bw()
 ggplot gives you control over the scales of your plot. There is one scale for each binding. In the plot
 we just made, there are five scales that we can manipulate: the x and y axes and the three legends.
 Let's change our x-axis to include the 5 minute timepoint. This is achieved with yet another layer.
-`p + scale_x_continuous(breaks = c(0, 5, 10, 20, 30))`
+
+```
+p + scale_x_continuous(breaks = c(0, 5, 10, 20, 30))
+```
 
 We can also manipulate legends with scale layers. Here we provide the labels for the Measurement scale (remember that we used an aesthetic to bind
 shape to Measurement). Note that ggplot will always order the labels according to the levels of the
@@ -207,11 +225,10 @@ binding. Common values for the colortype include:
 
 
 *** =instructions
+The ggplot object `p` has already been defined for you.
+Change the name of the CellType legend (the linetype binding) to "Cell Type".
+Read the documentation for `scale_color_manual()` and change the colors for E1909, E1915 and E1921 to be purple, orange and green, respectively.
 
-
-*** =hint
-
-no hints yet
 
 *** =pre_exercise_code
 ```{r}
@@ -224,19 +241,38 @@ color = Experiment,
 linetype = CellType))
 ```
 
+*** =hint
+Use ?scale_color_manual to learn how to set new color values.
+
+
 *** =sample_code
 ```{r}
+# Use a scale layer to change the name of the CellType legend (the linetype binding) to "Cell type".
 
+
+# Use scale_color_manual() to change the colors of the experiments to purple, orange and green
 
 ```
 
 *** =solution
 ```{r}
+# Use a scale layer to change the name of the CellType legend (the linetype binding) to "Cell type".
+p + scale_linetype_discrete(name = "Cell type")
 
+# Use scale_color_manual() to change the colors of the experiments to purple, orange and green
+p + scale_color_manual(values = c("purple", "orange", "green"))
 ```
 
 *** =sct
 ```{r}
+test_function("scale_linetype_discrete", args = c("name"),
+              not_called_msg = "Use `scale_linetype_discrete()` to change the attributes of the linetype aesthetic.",
+              args_not_specified_msg = "Have you specified an argument to the `scale_linetype_discrete()` function?",
+              incorrect_msg = "Have you passed in the correct argument and value (`name = 'Cell type'`) to the `scale_linetype_discrete()` function?")
+test_function("scale_color_manual", args = c("values"),
+              not_called_msg = "Use `scale_color_manual()` to change the colors of the aesthetic associated with Experiment.",
+              args_not_specified_msg = "Have you specified an argument to the `scale_color_manual()` function?",
+              incorrect_msg = "Have you passed in the correct argument and values (`values = c('purple', 'orange', 'green')`) to the `scale_color_manual()` function?")
 test_error()
 ```
 --- type:NormalExercise lang:r xp:100 skills:1 key:05b0d38908
@@ -261,8 +297,8 @@ The `facet_wrap()` function can be used to wrap a 1D ribbon of plots into a 2D l
 *** =instructions
 The ggplot object `p` has already been defined for you.
 Use `facet_grid()` to make separate figures for each Measurement, and each Experiment. Experiment with switching each of these factors on either side of the `~`.
-*** =hint
 
+*** =hint
 `facet_wrap()` needs a factor on the RHS of the tilde.
 
 *** =pre_exercise_code
