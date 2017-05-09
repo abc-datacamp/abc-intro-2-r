@@ -610,7 +610,7 @@ names and column names, respectively. Find how many rows and columns the dataset
 Use indexing vectors to access specific elements, or complete rows or columns. For example, `USPersonalExpenditure[1, 3]` 
 returns the element in the first row, third column. Return the same element, but using character index vectors to indicate the rows and columns.
 
-A blank vector in either the row or column specification implies we want all elements in that dimension. Get all Private Education expeditures. If your result is one-dimensional, it is by default returned as a vector. If you don't want this behavior, you can use the
+A blank vector in either the row or column specification implies we want all elements in that dimension. Get all Private Education expenditures. If your result is one-dimensional, it is by default returned as a vector. If you don't want this behavior, you can use the
 `drop=FALSE` option.
 
 Remember all of the elements in a matrix must be of the same data type. If you assign one element
@@ -666,10 +666,30 @@ USPersonalExpenditure["Personal Care", "1955"] <- NA
 ```
 
 *** =hint
-no hints yet
+Matrix elements are accessed by specifying two indexing vectors: the first indicating rows, the second columns. Leaving either of those vectors blank will select all of that dimension.
 
 *** =sct
 ```{r}
+test_function("dim", args = c("x"),
+              not_called_msg = "Use the `dim()` function to get the number of rows and columns in the USPersonalExpenditure dataset",
+              args_not_specified_msg = "Have you specified the correct argument (`USPersonalExpenditure`) to the `dim()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`USPersonalExpenditure`) to the `dim()` function?")
+test_function("rownames", args = c("x"),
+              not_called_msg = "Use the `rownames()` function to get the names of the rows for the USPersonalExpenditure dataset",
+              args_not_specified_msg = "Have you specified the argument to the `rownames()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`USPersonalExpenditure`) to the `rownames()` function?")
+test_function("colnames", args = c("x"),
+              not_called_msg = "Use the `colnames()` function to get the names of the rows for the USPersonalExpenditure dataset",
+              args_not_specified_msg = "Have you specified the argument to the `colnames()` function?",
+              incorrect_msg = "Have you passed in the correct argument (`USPersonalExpenditure`) to the `colnames()` function?")
+test_student_typed("USPersonalExpenditure['Food and Tobacco', '1950']",
+              not_typed_msg = "`USPersonalExpenditure['Food and Tobacco', '1950']` uses 'Food and Tobacco' to indicate the row and '1950' to indicate the column.")
+test_student_typed("USPersonalExpenditure[c('Private Education', 'Personal Care'), ]",
+              not_typed_msg = "`USPersonalExpenditure[c('Private Education', 'Personal Care'), ]` selects the 'Private Education' and 'Personal Care' rows from the original matrix.")
+test_output_contains("USPersonalExpenditure['Personal Care',  , drop = FALSE]",
+              incorrect_msg = "`USPersonalExpenditure['Personal Care',  , drop = FALSE]` generates a 1-row matrix.")
+test_output_contains("USPersonalExpenditure['Personal Care', '1955'] <- NA",
+              incorrect_msg = "Assigning an element as NA does not coerce the rest of the matrix.")
 test_error()
 ```
 
@@ -723,7 +743,7 @@ colnames(m) <- LETTERS[1:4]
 m[ , 1] <- 1 # could also be accessed using m[ , "A"]
 
 # Create a second matrix called m2, using cbind() to combine state.name and state.abb
-cbind(state.name, state.abb)
+m2 <- cbind(state.name, state.abb)
 
 
 ```
@@ -733,6 +753,13 @@ Did you assign the rows and columns correctly? Remember, by default, R does rows
 
 *** =sct
 ```{r}
+test_object("m",
+            undefined_msg = "Assign a new matrix to `m`.",
+            incorrect_msg = "Did you assign the correct values to `m`? Use `m[ , 1] <- 1` to fill the first row with 1s.")
+test_object("m2",
+            undefined_msg = "Assign a new matrix to `m2`.",
+            incorrect_msg = "Did you assign the correct value to `m2`? Use `cbind()`.")
+
 test_error()
 ```
 
