@@ -144,13 +144,13 @@ library(reshape2)
 state.stats <- data.frame(Name=rownames(state.x77), state.x77)
 
 # Melt this dataset and assign to a variable called state.m
-state.m <- melt(state.stats, id.vars="Name")
+
 
 # Subset this to include only the Population dataset, assign this to a variable called pop
-pop <- subset(state.m, variable == "Population")
+
 
 # Plot this data as a scatter plot, with state names along the x-axis and population sizes along the y-axis
-ggplot(pop, aes(x = Name, y = value)) + geom_point()
+
 
 
 ```
@@ -192,6 +192,99 @@ test_function("ggplot", args = c("data", "mapping"),
               not_called_msg = "Use `ggplot()` to reshape the contents of `e1909`.",
               args_not_specified_msg = "Have you specified the dataframe to be drawn?",
               incorrect_msg = "Have you passed in the correct arguments (`pop, aes(x = Name, y = value)`) to the `ggplot()` function?")
+test_function("geom_point", 
+              not_called_msg = "Use `geom_point()` to draw a scatterplot.")
+test_error()
+```
+
+--- type:NormalExercise lang:r xp:100 skills:1 key:7381066a82
+## Merging data
+It is usually a good idea to keep all of your data from a particular study or project in a very small number of canonical "skinny" data frames. That way, when new experiments  are  performed,  you  can  add  new  rows  to  the dataset  with  the `rbind()` function. 
+
+Sometimes, you will want to add new metadata columns.
+For example, if you wanted to add technician data to each experiment, you can create a new data
+frame with this information.
+
+```
+experiment.log <- data.frame(Experiment=c("E1909", "E1915", "E1921"), Tech=c("Jason", "Luce", "Jason"), stringsAsFactors=TRUE)
+```
+
+If you wanted to look at technician-specific bias, for example, you can merge the technician data with your main data using the `merge()` function.
+
+```
+merge(ablation, experiment.log)
+```
+
+The `merge()` function merges two data frames based on common column values. By default, it looks
+for common column names, but these can be specified explicitly. By default, only rows which have
+elements common to both data frames will be kept, but you can change this behavior (see `?merge`).
+
+The merged data frame contains redundant information; i.e., if you know the Experiment, you know
+the Tech (we say the data is "denormalized"). While the merged data frame may be convenient when
+investigating  "tech  effects",  you  probably  don’t  want  to  store  this  data  frame  permanently.  This
+becomes  more  important  at  scale,  when  the  cost  of  storing  the  redundant  information  becomes  a
+limiting factor (usually in terms of the memory needed by R).
+
+*** =instructions
+The technician data has been created for you in a variable called experiment.log.
+Merge this with the ablation dataset into a variable called `abl.exp`.
+Plot the data as a scatterplot and color by technician.
+
+
+*** =hint
+Map Tech to color using an `aes()` function.
+
+
+
+*** =pre_exercise_code
+```{r}
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+
+library(ggplot2)
+library(reshape2)
+```
+
+*** =sample_code
+```{r}
+# Technician data about each experiment
+experiment.log <- data.frame(Experiment=c("E1909", "E1915", "E1921"), Tech=c("Jason", "Luce", "Jason"), stringsAsFactors=TRUE)
+
+# Merge this technician data with the ablation data frame, call it abl.exp
+
+
+# Plot this data as a scatterplot and color by technician
+
+
+
+```
+
+*** =solution
+```{r}
+# Technician data about each experiment
+experiment.log <- data.frame(Experiment=c("E1909", "E1915", "E1921"), Tech=c("Jason", "Luce", "Jason"), stringsAsFactors=TRUE)
+
+# Merge this technician data with the ablation data frame, call it abl.exp
+abl.exp <- merge(ablation, experiment.log)
+
+# Plot this data as a scatterplot and color by technician
+ggplot(abl.exp, aes(x = Time, y = Score)) + geom_point(aes(color = Tech))
+
+```
+
+*** =sct
+```{r}
+test_predefined_objects("experiment.log")
+test_object("abl.exp",
+             undefined_msg = "Make sure you assign the result from the merge command to `abl.exp`.",
+             incorrect_msg = "Did you merge the correct data frames (`ablation, experiment.log`)?")
+test_function("merge", args = c("x", "y"),
+              not_called_msg = "Use `merge()` to merge two data frames.",
+              args_not_specified_msg = "Have you specified both dataframes to be merged?",
+              incorrect_msg = "Have you passed in the correct arguments (`ablation, experiment.log`) to the `merge()` function?")
+test_function("ggplot", args = c("data", "mapping"),
+              not_called_msg = "Use `ggplot()` to reshape the contents of `e1909`.",
+              args_not_specified_msg = "Have you specified the dataframe to be drawn?",
+              incorrect_msg = "Have you passed in the correct arguments (`abl.exp, aes(x = Time, y = Score)`) to the `ggplot()` function?")
 test_function("geom_point", 
               not_called_msg = "Use `geom_point()` to draw a scatterplot.")
 test_error()
