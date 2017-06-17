@@ -289,3 +289,78 @@ test_function("geom_point",
               not_called_msg = "Use `geom_point()` to draw a scatterplot.")
 test_error()
 ```
+--- type:NormalExercise lang:r xp:100 skills:1 key:78ced58e43
+## Data aggregation
+When we used `dcast()` earlier, we were rearranging the raw data.
+In other words, every value in the cast data frame could be found in the original data frame.
+The `dcast()` function can also be used to summarize your data (also known as "data aggregation"), by using a new parameter `fun.aggregate`.
+For example, we may want to compute the mean Score for each combination of Measurement, Time, and CellType (i.e., averaging across experiments).
+
+```
+# Show all raw data in a table
+dcast(ablation, Experiment + Time + Measurement ~ CellType, value.var="Score")
+# Average across experiments
+dcast(ablation,
+      Time + Measurement ~ CellType,
+      value.var="Score",
+      fun.aggregate=mean)
+```
+
+You  can  pass  any  function  that  takes  a  vector  and  returns  a  single  value  as  an  aggregation  func-
+tion; `dcast()` will  call  this  function  for  each  unique  combination  of  levels  of  the  factors  that  you
+specify in the formula.
+Here we compute the number of observations for each unique combination of Measurement, CellType and Experiment (the `length()` function is the default aggregation function).
+
+```
+dcast(ablation,
+      Measurement + CellType ~ Experiment,
+      value.var="Score",
+      fun.aggregate=length)
+```
+
+
+*** =instructions
+
+
+*** =hint
+
+
+
+*** =pre_exercise_code
+```{r}
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+
+library(ggplot2)
+library(reshape2)
+```
+
+*** =sample_code
+```{r}
+
+
+```
+
+*** =solution
+```{r}
+
+
+```
+
+*** =sct
+```{r}
+test_predefined_objects("experiment.log")
+test_object("abl.exp",
+             undefined_msg = "Make sure you assign the result from the merge command to `abl.exp`.",
+             incorrect_msg = "Did you merge the correct data frames (`ablation, experiment.log`)?")
+test_function("merge", args = c("x", "y"),
+              not_called_msg = "Use `merge()` to merge two data frames.",
+              args_not_specified_msg = "Have you specified both dataframes to be merged?",
+              incorrect_msg = "Have you passed in the correct arguments (`ablation, experiment.log`) to the `merge()` function?")
+test_function("ggplot", args = c("data", "mapping"),
+              not_called_msg = "Use `ggplot()` to reshape the contents of `e1909`.",
+              args_not_specified_msg = "Have you specified the dataframe to be drawn?",
+              incorrect_msg = "Have you passed in the correct arguments (`abl.exp, aes(x = Time, y = Score)`) to the `ggplot()` function?")
+test_function("geom_point", 
+              not_called_msg = "Use `geom_point()` to draw a scatterplot.")
+test_error()
+```
