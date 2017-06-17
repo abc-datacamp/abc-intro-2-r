@@ -92,3 +92,107 @@ test_function("dcast", args = c("data", "formula", "value.var"),
               incorrect_msg = "Have you passed in the correct arguments (`e1909, formula = Measurement + Time ~ CellType, value.var = 'Score'`) to the `dcast()` function?")
 test_error()
 ```
+--- type:NormalExercise lang:r xp:100 skills:1 key:e3140062cf
+## Melting data
+The format of the ablation dataset that we have been working with is long and skinny.
+The hallmark of this canonical (melted) format is that there is only one (set of) independently observed value(s)  in each row.
+All  of  the  other  columns  are  identifying  values (or metadata).
+They  explain  what  exactly  was measured.
+_When your data is in this format, it is straightfoward to subset, transform, and aggregate it by any combination of factors of the identifying variables._
+That is why, for example, the `ggplot` package requires that your data is in melted format.
+
+The `melt()` function is used to convert a data frame with several measurement columns into a data frame in this canonical format, which has one row for every observed (measured) value.
+Let’s melt data frame about states, with eight observations per row.
+
+```
+state.stats <- data.frame(Name = rownames(state.x77), state.x77)
+state.m <- melt(state.stats, id.vars = "Name")
+```
+You need to tell `melt()` which of your variables are identifying variables (`id.vars`), and which are measured variables (`measure.vars`).
+If  you  only  supply  one  of `id.vars` or `measure.vars`, `melt()` will  assume  the  remainder  of  the
+variables in the data set belong to the other. If you supply neither, `melt()` will assume factor and
+character variables are id variables, and all others are measured.
+
+By default, the name of the measurement variables will be put into a column called "variable", and
+their associated values will be put into a column called "value", but these can be changed by using the arguments
+`variable.name` (or `varnames` for matrices) and `value.name`.
+
+
+*** =instructions
+The dataframe containing multiple observations about each US state has been given to you.
+Melt this dataset so that each unique combination of state and measurement is on a row.
+Subset out only the Population measurements and assign to a variable called `pop`.
+Plot this data as a scatter plot, with state names along the x-axis and population sizes along the y-axis. 
+
+
+*** =hint
+
+Use `str()` to look at the structure of your data, both before and after melting.
+
+
+*** =pre_exercise_code
+```{r}
+state.stats <- data.frame(Name=rownames(state.x77), state.x77)
+
+library(ggplot2)
+library(reshape2)
+```
+
+*** =sample_code
+```{r}
+# Create a data frame of multiple observations about US states
+state.stats <- data.frame(Name=rownames(state.x77), state.x77)
+
+# Melt this dataset and assign to a variable called state.m
+state.m <- melt(state.stats, id.vars="Name")
+
+# Subset this to include only the Population dataset, assign this to a variable called pop
+pop <- subset(state.m, variable == "Population")
+
+# Plot this data as a scatter plot, with state names along the x-axis and population sizes along the y-axis
+ggplot(pop, aes(x = Name, y = value)) + geom_point()
+
+
+```
+
+*** =solution
+```{r}
+# Create a data frame of multiple observations about US states
+state.stats <- data.frame(Name=rownames(state.x77), state.x77)
+
+# Melt this dataset and assign to a variable called state.m
+state.m <- melt(state.stats, id.vars="Name")
+
+# Subset this to include only the Population dataset, assign this to a variable called pop
+pop <- subset(state.m, variable == "Population")
+
+# Plot this data as a scatter plot, with state names along the x-axis and population sizes along the y-axis
+ggplot(pop, aes(x = Name, y = value)) + geom_point()
+
+```
+
+*** =sct
+```{r}
+test_predefined_objects("state.stats")
+test_object("state.m",
+             undefined_msg = "Make sure you assign the result from the melt command to `state.m`.",
+             incorrect_msg = "Did you use the correct selection expression (`id.vars='Name'`) to subset the `state.stats` dataframe.")
+test_function("melt", args = c("data"),
+              not_called_msg = "Use `melt()` to create one row for each combination of state and observation type.",
+              args_not_specified_msg = "Have you specified both the dataframe to be subsetted, and the `id.vars`?",
+              incorrect_msg = "Have you passed in the correct arguments (`state.stats, id.vars='Name'`) to the `melt()` function?")
+test_object("pop",
+             undefined_msg = "Make sure you assign the result from the subset command to `pop`.",
+             incorrect_msg = "Did you use the correct selection expression (`variable == 'Population'`) to subset the `state.m` dataframe.")
+test_function("subset", args = c("x"),
+              not_called_msg = "Use `subset()` to extract subsets of data from a data frame.",
+              args_not_specified_msg = "Have you specified the dataframe to be subsetted?",
+              incorrect_msg = "Have you passed in the correct arguments (`state.m, variable == 'Population'`) to the `subset()` function?")
+test_function("ggplot", args = c("data", "mapping"),
+              not_called_msg = "Use `ggplot()` to reshape the contents of `e1909`.",
+              args_not_specified_msg = "Have you specified the dataframe to be drawn?",
+              incorrect_msg = "Have you passed in the correct arguments (`pop, aes(x = Name, y = value)`) to the `ggplot()` function?")
+test_function("geom_point", 
+              not_called_msg = "Use `geom_point()` to draw a scatterplot.")
+test_error()
+```
