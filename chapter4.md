@@ -371,6 +371,74 @@ test_function("dcast", args = c("data", "formula", "value.var", "fun.aggregate")
               incorrect_msg = "Have you passed in the correct arguments to the `dcast()` function?")
 test_error()
 ```
+--- type:NormalExercise lang:r xp:100 skills:1 key:fe7e5696f2
+## Summarizing data
+A useful housekeeping function, that is part of another Hadley Wickham package (`plyr`) is `summarize()`.
+The general form of `summarize()` is:
+
+```
+summarize(df, new.col.name = some.function)
+```
+
+where the first argument to is a data frame, and subsequent arguments are functions that will be called in the context of the data frame.
+The result of is a new data frame where each column is the result of one of the functions you supplied (the name of the column will be the argument name you gave to the function).
+
+To get the max and min Scores from the ablation data frame, we can use:
+
+```
+summarize(ablation, the.max=max(Score), the.min=min(Score))
+```
+
+The ability to do this will become useful in the next section.
+*** =instructions
+
+Create a new data frame called e1909.min.max containing the min and max Score for the E1909 Experiment.
+Do the same for the E1915 Experiment.
+
+
+*** =hint
+Use `subset(ablation, Experiment == "E1909")` to extract data from the E1909 Experiment only.
+
+
+*** =pre_exercise_code
+```{r}
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+
+library(ggplot2)
+library(reshape2)
+library(plyr)
+```
+
+*** =sample_code
+```{r}
+# Create a new data frame called e1909.min.max containing the min and max Score for the E1909 Experiment
+
+
+# Create a new data frame called e1915.min.max containing the min and max Score for the E1915 Experiment
+
+```
+
+*** =solution
+```{r}
+# Create a new data frame called e1909.min.max containing the min and max Score for the E1909 Experiment
+e1909.min.max <- summarize(subset(ablation, Experiment == "E1909"), the.min = min(Score), the.max = max(Score))
+
+# Create a new data frame called e1915.min.max containing the min and max Score for the E1915 Experiment
+e1915.min.max <- summarize(subset(ablation, Experiment == "E1915"), the.min = min(Score), the.max = max(Score))
+
+
+```
+
+*** =sct
+```{r}
+test_object("e1909.min.max",
+             undefined_msg = "Make sure you assign the result from the summarize command to `e1909.min.max`.",
+             incorrect_msg = "Did you subset the ablation data to only include data from Experiment E1909, and calculate the min and the max?")
+test_object("e1915.min.max",
+             undefined_msg = "Make sure you assign the result from the summarize command to `e1915.min.max`.",
+             incorrect_msg = "Did you subset the ablation data to only include data from Experiment E1915, and calculate the min and the max?")
+test_error()
+```
 --- type:NormalExercise lang:r xp:100 skills:1 key:0c4e4f3199
 ## Plyr: "Split, apply, combine"
 What `dcast()` is actually doing is _splitting_ your data into groups (by sets of factors), _applying_  some  function  on  each  group  and  then  _combining_  the  results  into  a  set  with  one  entry  per group. However, as we saw, the aggregation function for `dcast()` must return a single value. What if you want to compute a range (max and min) for each combination of levels?
