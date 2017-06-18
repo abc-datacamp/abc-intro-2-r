@@ -320,7 +320,7 @@ dcast(ablation,
 
 
 *** =instructions
-
+Summarize how many times each kind of Measurement was made for each of the two cells types. Get the maximum values of each of those Measurements. You'll notice that R issues an odd warning about non-missing arguments to `max()`when you do this. This is because `dcast()` will always call your aggregation function once with an empty vector (to figure out what to put in the result table if there are no cases for a particular combination of levels). To get rid of this error message, you can explicitly state what value should be used for missing cases (e.g., `fill=-Inf`).
 
 *** =hint
 
@@ -336,31 +336,38 @@ library(reshape2)
 
 *** =sample_code
 ```{r}
+# Summarize how many times each kind of Measurement was made for each of the two cells types
 
+
+# Get the maximum values of each of those Measurements.
 
 ```
 
 *** =solution
 ```{r}
+# Summarize how many times each kind of Measurement was made for each of the two cells types
+dcast(ablation, 
+      CellType ~ Measurement,
+      value.var="Score",
+      fun.aggregate=length)
 
+# Get the maximum values of each of those Measurements.
+dcast(ablation, 
+      CellType ~ Measurement,
+      value.var="Score",
+      fun.aggregate=max)
 
 ```
 
 *** =sct
 ```{r}
-test_predefined_objects("experiment.log")
-test_object("abl.exp",
-             undefined_msg = "Make sure you assign the result from the merge command to `abl.exp`.",
-             incorrect_msg = "Did you merge the correct data frames (`ablation, experiment.log`)?")
-test_function("merge", args = c("x", "y"),
-              not_called_msg = "Use `merge()` to merge two data frames.",
-              args_not_specified_msg = "Have you specified both dataframes to be merged?",
-              incorrect_msg = "Have you passed in the correct arguments (`ablation, experiment.log`) to the `merge()` function?")
-test_function("ggplot", args = c("data", "mapping"),
-              not_called_msg = "Use `ggplot()` to reshape the contents of `e1909`.",
-              args_not_specified_msg = "Have you specified the dataframe to be drawn?",
-              incorrect_msg = "Have you passed in the correct arguments (`abl.exp, aes(x = Time, y = Score)`) to the `ggplot()` function?")
-test_function("geom_point", 
-              not_called_msg = "Use `geom_point()` to draw a scatterplot.")
+test_function("dcast", args = c("data", "formula", "value.var", "fun.aggregate"), index = 1,
+              not_called_msg = "Use `dcast()` to summarize the ablation data frame.",
+              args_not_specified_msg = "Have you specified all the arguments (data frame, formula, value.var, fun.aggregate)",
+              incorrect_msg = "Have you passed in the correct arguments to the `dcast()` function?")
+test_function("dcast", args = c("data", "formula", "value.var", "fun.aggregate"), index = 2,
+              not_called_msg = "Use `dcast()` to summarize the ablation data frame.",
+              args_not_specified_msg = "Have you specified all the arguments (data frame, formula, value.var, fun.aggregate)?",
+              incorrect_msg = "Have you passed in the correct arguments to the `dcast()` function?")
 test_error()
 ```
