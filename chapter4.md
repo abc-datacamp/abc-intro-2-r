@@ -371,3 +371,59 @@ test_function("dcast", args = c("data", "formula", "value.var", "fun.aggregate")
               incorrect_msg = "Have you passed in the correct arguments to the `dcast()` function?")
 test_error()
 ```
+--- type:NormalExercise lang:r xp:100 skills:1 key:0c4e4f3199
+## Plyr: "Split, apply, combine"
+What `dcast()` is actually doing is _splitting_ your data into groups (by sets of factors), _applying_  some  function  on  each  group  and  then  _combining_  the  results  into  a  set  with  one  entry  per group. However, as we saw, the aggregation function for `dcast()` must return a single value. What if you want to compute a range (max and min) for each combination of levels?
+
+The `plyr` package allows us to do just that.
+The plyr package contains a family of functions that implement the split, apply, combine approach in a flexible but consistent  manner.
+The plyr functions can work with any data structure as input, and can output any data structure.
+The general form of the plyr functions are `xyply()`, where _x_ and _y_ are one-letter
+abbreviations of the different data structures (a: array, matrix or vector; l: list; d: data frame).
+
+We can find the range of Scores for each combination of Measurement, CellType and Time, using the
+`ddply()` function.
+
+```
+ddply(ablation,
+      ~ Measurement + CellType + Time,
+      summarize,
+      the.max=max(Score), the.min=min(Score))
+```
+
+We use the `ddply()` function because our input is the ablation data frame, and we want the result to
+be a data frame.
+The second argument specifies the factors that we will split by.
+The third argument gives the function to be applied to each group thus split.
+The fourth and additional arguments are passed to this applied function.
+
+*** =instructions
+
+
+*** =hint
+
+
+
+*** =pre_exercise_code
+```{r}
+ablation <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/production/course_2921/datasets/ablation.csv", header = TRUE, stringsAsFactors = TRUE)
+
+library(ggplot2)
+library(reshape2)
+library(plyr)
+```
+
+*** =sample_code
+```{r}
+
+```
+
+*** =solution
+```{r}
+
+```
+
+*** =sct
+```{r}
+test_error()
+```
