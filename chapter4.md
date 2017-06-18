@@ -386,7 +386,7 @@ The result of is a new data frame where each column is the result of one of the 
 To get the max and min Scores from the ablation data frame, we can use:
 
 ```
-summarize(ablation, the.max=max(Score), the.min=min(Score))
+summarize(ablation, the.min=min(Score), the.max=max(Score))
 ```
 
 The ability to do this will become useful in the next section.
@@ -449,14 +449,13 @@ The plyr functions can work with any data structure as input, and can output any
 The general form of the plyr functions are `xyply()`, where _x_ and _y_ are one-letter
 abbreviations of the different data structures (a: array, matrix or vector; l: list; d: data frame).
 
-We can find the range of Scores for each combination of Measurement, CellType and Time, using the
-`ddply()` function.
+We can find the range of Scores for each Experiment, using the `ddply()` function; no need to subset each Experiment like we did in the previous exercise.
 
 ```
 ddply(ablation,
-      ~ Measurement + CellType + Time,
+      ~ Experiment,
       summarize,
-      the.max=max(Score), the.min=min(Score))
+      the.min=min(Score), the.max=max(Score))
 ```
 
 We use the `ddply()` function because our input is the ablation data frame, and we want the result to
@@ -488,7 +487,23 @@ library(plyr)
 
 *** =solution
 ```{r}
+min.max <- ddply(ablation,
+                 ~ Measurement + CellType + Time,
+                 summarize,
+                 the.min=min(Score), the.max=max(Score))
+                 
+ablation.mean.sd <- ddply(ablation,
+                          ~ Measurement + CellType + Time,
+                          summarize,
+                          mean=mean(Score), sd=sd(Score))                
 
+ggplot(ablation.mean.sd, aes(x=Time, y=mean)) +
+geom_point(size=4) +
+geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=0.4) +
+facet_grid( Measurement ~ CellType) +
+geom_line() +
+geom_point(data=ablation, aes(y=Score), color="blue", shape=1) +
+labs(title="+/- 1 SD")
 ```
 
 *** =sct
