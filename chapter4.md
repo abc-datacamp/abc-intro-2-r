@@ -363,7 +363,7 @@ dcast(ablation,
 ```{r}
 test_function("dcast", args = c("data", "formula", "value.var", "fun.aggregate"), index = 1,
               not_called_msg = "Use `dcast()` to summarize the ablation data frame.",
-              args_not_specified_msg = "Have you specified all the arguments (data frame, formula, value.var, fun.aggregate)",
+              args_not_specified_msg = "Have you specified all the arguments (data frame, formula, value.var, fun.aggregate)?",
               incorrect_msg = "Have you passed in the correct arguments to the `dcast()` function?")
 test_function("dcast", args = c("data", "formula", "value.var", "fun.aggregate"), index = 2,
               not_called_msg = "Use `dcast()` to summarize the ablation data frame.",
@@ -458,17 +458,23 @@ ddply(ablation,
       the.min=min(Score), the.max=max(Score))
 ```
 
-We use the `ddply()` function because our input is the ablation data frame, and we want the result to
-be a data frame.
+We use the `ddply()` function because our input is the ablation data frame (first _d_), and we want the result to
+be a data frame (second _d_).
 The second argument specifies the factors that we will split by.
 The third argument gives the function to be applied to each group thus split.
 The fourth and additional arguments are passed to this applied function.
 
 *** =instructions
+Make a data frame of the min and max Scores for each unique combination of Measurement, CellType and Time, and assign it to `min.max`.
+For the same combinations, make a data frame of the mean and standard deviation of the Scores and assign it to `ablation.mean.sd`.
 
+Make a ggplot object `g` that plots the ablation.mean.sd data, with Time on the x-axis, and mean on the y-axis.
+Modify it to plot one panel for every combination of Measurement and CellType. 
+Finally, add errorbars at mean +/- 1 SD, using the `geom_errorbar()` function.
 
 *** =hint
-
+Use `facet_grid()` to plot multiple panels.
+Use the aesthetics ymax and ymin for the upper and lower bounds of the error bars.
 
 
 *** =pre_exercise_code
@@ -482,31 +488,66 @@ library(plyr)
 
 *** =sample_code
 ```{r}
+# Make a data frame of the min and max Scores for each unique combination of Measurement, CellType and Time, and assign it to min.max
+
+
+# Make a data frame of the mean and standard deviation of the Scores for each unique combination of Measurement, CellType and Time and assign it to ablation.mean.sd
+
+
+# Make a ggplot object g that plots the ablation.mean.sd data, with Time on the x-axis, and mean on the y-axis
+
+
+# Modify it to plot one panel for every combination of Measurement and CellType
+
+
+# Finally, add errorbars at mean +/- 1 SD. Use geom_errorbar() 
+
 
 ```
 
 *** =solution
 ```{r}
+# Make a data frame of the min and max Scores for each unique combination of Measurement, CellType and Time, and assign it to min.max
 min.max <- ddply(ablation,
                  ~ Measurement + CellType + Time,
                  summarize,
                  the.min=min(Score), the.max=max(Score))
                  
+# Make a data frame of the mean and standard deviation of the Scores for each unique combination of Measurement, CellType and Time and assign it to ablation.mean.sd
 ablation.mean.sd <- ddply(ablation,
                           ~ Measurement + CellType + Time,
                           summarize,
                           mean=mean(Score), sd=sd(Score))                
 
-ggplot(ablation.mean.sd, aes(x=Time, y=mean)) +
-geom_point(size=4) +
-geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=0.4) +
-facet_grid( Measurement ~ CellType) +
-geom_line() +
-geom_point(data=ablation, aes(y=Score), color="blue", shape=1) +
-labs(title="+/- 1 SD")
+# Make a ggplot object g that plots the ablation.mean.sd data, with Time on the x-axis, and mean on the y-axis
+g <- ggplot(ablation.mean.sd, aes(x=Time, y=mean))
+
+# Modify it to plot one panel for every combination of Measurement and CellType
+g <- g + facet_grid( Measurement ~ CellType) 
+
+# Finally, add errorbars at mean +/- 1 SD. Use geom_errorbar().
+g + geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd))
 ```
 
 *** =sct
 ```{r}
+test_object("min.max",
+             undefined_msg = "Make sure you assign the min/max result from the ddply command to `min.max`.",
+             incorrect_msg = "Did you use Measurement, CellType and Time as your grouping factors, and calculate the min and the max?")
+test_object("ablation.mean.sd",
+             undefined_msg = "Make sure you assign the mean/sd result from the ddply command to `ablation.mean.sd`.",
+             incorrect_msg = "Did you use Measurement, CellType and Time as your grouping factors, and calculate the `mean()` and the `sd()`?")
+test_function("ggplot", args = c("data", "mapping"),
+              not_called_msg = "Use `ggplot()` to initialize your plot.",
+              args_not_specified_msg = "Have you specified all the arguments (data frame, mapping aesthetics)?",
+              incorrect_msg = "Have you passed in the correct arguments to the `ggplot()` function (data frame and mapping aesthetics)?")
+test_function("facet_grid", args = c("facets"),
+              not_called_msg = "Use `facet_grid()` to make individual panels for each combination of Measurement and CellType.",
+              args_not_specified_msg = "Have you specified the correct formula (`Measurement ~ CellType`)?",
+              incorrect_msg = "Have you passed in the correct arguments to the `facet_grid()` function (`Measurement ~ CellType`)?")
+test_function("geom_errorbar", args = c("mapping"),
+              not_called_msg = "Use `geom_errorbar()` to add error bars to your plot.",
+              args_not_specified_msg = "Have you specified the mapping aesthetics?",
+              incorrect_msg = "Have you passed in the correct arguments to the `geom_errorbar()` function?")
 test_error()
 ```
